@@ -23,7 +23,7 @@ module.exports = function() {
       // handle error in other way too?
     }
     return salt;
-  }
+  };
 
   return {
     generate: generate,

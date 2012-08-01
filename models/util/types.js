@@ -11,9 +11,9 @@ define([
   validator.Validator.prototype.isString = function() {
     if (String(this.str) !== this.str || this.str.length === 0) { return this.error(this.msg || 'Not a string'); }
     return this;
-  }
+  };
 
-  var _validator = function() { return new validator.Validator() };
+  var _validator = function() { return new validator.Validator(); };
   var _sanitize = validator.sanitize;
 
   var types = {
