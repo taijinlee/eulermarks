@@ -5,6 +5,7 @@
 1. Install [nvm](https://github.com/creationix/nvm/)
 1. Install latest version of node (check on [nodejs.org](http://nodejs.org))
 1. Install and run [Mongodb](http://www.mongodb.org/) on standard port
+1. Install node modules in base directory via ```npm install```
 
 ## Makefile ##
 
