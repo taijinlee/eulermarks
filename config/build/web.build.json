@@ -5,16 +5,16 @@
   //optimize: 'none',
 
   paths: {
-    'backbone': 'libs/backbone/backbone-amd',
-    'backbone-web': 'libs/backbone/backbone-web',
-    'validator': 'libs/validator/validator-min',
-    'jquery': 'libs/jquery/jquery-min',
-    'underscore': 'libs/underscore/underscore',
-    'async': 'libs/async/async',
-    'json2': 'libs/json2',
-    'text': 'libs/require/text',
-    'order': 'libs/require/order-min',
-    'humanize': 'libs/humanize'
+    'backbone': 'lib/backbone/backbone-amd',
+    'backbone-web': 'lib/backbone/backbone-web',
+    'validator': 'lib/validator/validator-min',
+    'jquery': 'lib/jquery/jquery-min',
+    'underscore': 'lib/underscore/underscore',
+    'async': 'lib/async/async',
+    'json2': 'lib/json2',
+    'text': 'lib/require/text',
+    'order': 'lib/require/order-min',
+    'humanize': 'lib/humanize'
   },
 
   modules: [
