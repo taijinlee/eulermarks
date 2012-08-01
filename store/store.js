@@ -18,11 +18,10 @@ module.exports = function(type, host, port) {
 
     insert: function(obj, context, callback) { return store.insert.apply(store, arguments); },
     retrieve: function(key, context, options, callback) { return store.retrieve.apply(store, arguments); },
-    list: function(criteria, limit, skip, context, callback) { return store.list.apply(store, arguments); },
-
     update: function(criteria, obj, context, callback) { return store.update.apply(store, arguments); },
     upsert: function(criteria, obj, context, callback) { return store.upsert.apply(store, arguments); },
     destroy: function(criteria, context, callback) { return store.destroy.apply(store, arguments); },
+    query: function(criteria, context, options, callback) { return store.query.apply(store, arguments); },
 
     generateId: function() { return store.generateId.apply(store, arguments); },
     idEncode: function(encodedId) { return store.idEncode.apply(store, arguments); },

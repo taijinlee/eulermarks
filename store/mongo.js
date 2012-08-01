@@ -141,10 +141,8 @@ module.exports = function(host, port) {
     destroy: destroy,
     query: query,
 
-
     generateId: generateId,
     idEncode: idEncode,
-    idDecode: idDecode,
-
+    idDecode: idDecode
   };
 };
