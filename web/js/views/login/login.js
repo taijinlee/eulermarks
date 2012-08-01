@@ -32,7 +32,7 @@ define([
         type: 'post',
         data: $.param(values),
         success: function(result) {
-          Backbone.history.navigate('home', true);
+          Backbone.history.navigate('account', true);
           console.log(result);
         },
         error: function(jqXHR, textStatus, errorThrown) {
