@@ -1,4 +1,4 @@
-# EulerMarks, a project Euler Benchmarking site#
+# EulerMarks, a [Project Euler](http://projecteuler.net/) Benchmarking site#
 
 ## Install procedure ##
 
