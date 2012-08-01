@@ -1,0 +1,47 @@
+
+var should = require('should');
+var sinon = require('sinon');
+
+var store = require(process.env.APP_ROOT + '/store/store.js')('ram');
+var history = require(process.env.APP_ROOT + '/history/history.js')(store);
+var userIdentification = require(process.env.APP_ROOT + '/app/internal/userIdentification.js')(store);
+
+var UserModel = require(process.env.APP_ROOT + '/models/user.js')(store);
+var authHandler = require(process.env.APP_ROOT + '/app/public/handlers/auth.js')(store, history, userIdentification);
+
+describe('user auth handler:', function() {
+
+  var user;
+  before(function(done) {
+    user = new UserModel({ id: '23', handle: 'myHandle$%^456', password: 'myPassword!@#123', email: 'myEmail@email.com' });
+    user.create(done);
+  });
+
+  describe('#login', function() {
+    it('should return userId and cookie when user identification succeeds', function(done) {
+      authHandler.login({ id: '23', handle: 'myHandle$%^456', password: 'myPassword!@#123' }, function(error, userId, cookie) {
+        should.not.exist(error);
+        userId.should.equal('23');
+        should.exist(cookie);
+        done();
+      });
+    });
+
+    it('should return error when user doesnt exist', function(done) {
+      authHandler.login({ id: '23', handle: 'BADmyHandle$%^456', password: 'myPassword!@#123' }, function(error, userId, cookie) {
+        should.exist(error);
+        done();
+      });
+    });
+
+    it('should return error when password doesnt match', function(done) {
+      authHandler.login({ id: '23', handle: 'myHandle$%^456', password: 'yPassword!@#123' }, function(error, userId, cookie) {
+        should.exist(error);
+        done();
+      });
+    });
+
+  });
+
+
+});

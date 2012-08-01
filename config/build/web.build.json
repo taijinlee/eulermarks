@@ -1,0 +1,25 @@
+({
+  appDir: '../../web',
+  baseUrl: 'js',
+  dir: '../../web-build',
+  //optimize: 'none',
+
+  paths: {
+    'backbone': 'libs/backbone/backbone-amd',
+    'backbone-web': 'libs/backbone/backbone-web',
+    'validator': 'libs/validator/validator-min',
+    'jquery': 'libs/jquery/jquery-min',
+    'underscore': 'libs/underscore/underscore',
+    'async': 'libs/async/async',
+    'json2': 'libs/json2',
+    'text': 'libs/require/text',
+    'order': 'libs/require/order-min',
+    'humanize': 'libs/humanize'
+  },
+
+  modules: [
+    {
+      name: 'common'
+    }
+  ]
+})

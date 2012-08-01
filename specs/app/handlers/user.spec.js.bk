@@ -1,0 +1,158 @@
+
+var should = require('should');
+var sinon = require('sinon');
+var _ = require('underscore');
+
+var store = require(process.env.APP_ROOT + '/store/store.js')('ram');
+var HistoryModel = require(process.env.APP_ROOT + '/models/history.js')(store);
+var UserModel = require(process.env.APP_ROOT + '/models/user.js')(store);
+
+var history = require(process.env.APP_ROOT + '/history/history.js')(store);
+var userIdentification = require(process.env.APP_ROOT + '/app/internal/userIdentification.js')(store);
+var userHandler = require(process.env.APP_ROOT + '/app/public/handlers/user.js')(store, history, userIdentification);
+
+describe('user route handler:', function() {
+
+  var userIdentificationStub;
+  var userData = {
+    id: store.generateId(),
+    handle: 'test',
+    email: 'someone@somewhere.com',
+    password: 'qwerty'
+  };
+  var updatedUser = { handle: 'New User', email: 'myemail@somewhere.com' };
+
+  before(function() {
+    userIdentificationStub = sinon.stub(userIdentification, 'check');
+  });
+
+  beforeEach(function(done) {
+    var deleteUser = new UserModel();
+    deleteUser.remove(function() {
+      var user = new UserModel(userData);
+      if (!user.isValid()) {
+        throw new Error('invalid user creation');
+      }
+      user.create(done);
+    });
+  });
+
+  describe('#create', function() {
+    it('should be able to tell history about user create', function(done) {
+      var createUserData = { handle: userData.handle, email: userData.email, password: userData.password };
+      userHandler.create(createUserData, function(error, storedUserData) {
+        should.not.exist(error);
+
+        _.each(createUserData, function(value, key) { storedUserData[key].should.equal(value); });
+
+        var history = new HistoryModel({ entityId: storedUserData.id });
+        history.retrieve(function(error, historyData) {
+          var _userData = historyData.params.shift();
+
+          _userData.handle.should.equal(userData.handle);
+          _userData.email.should.equal(userData.email);
+          _userData.password.should.equal(userData.password);
+          should.exist(_userData.created);
+          done();
+        });
+      });
+    });
+
+    it('should fail on bad email', function(done) {
+      var createUserData = { handle: userData.handle, email: 'myBadEmail', password: userData.password };
+      userHandler.create(createUserData, function(error) {
+        should.exist(error);
+        done();
+      });
+    });
+
+    it('should fail on bad handle', function(done) {
+      var createUserData = { handle: undefined, email: userData.email, password: userData.password };
+      userHandler.create(createUserData, function(error) {
+        should.exist(error);
+        done();
+      });
+    });
+  });
+
+  describe('#retrieve', function() {
+    it('should be able to retrieve user self data', function(done) {
+      userIdentificationStub.returns(userData.id); // returns the id of the user
+      userHandler.retrieve('login stubbed out', userData.id, function(error, data) {
+        should.not.exist(error);
+        data.isSelf.should.equal(true);
+
+        delete data.isSelf;
+        delete data.created;
+        userData.profilePictureUrl = '';
+        data.should.eql(userData);
+
+        done();
+      });
+    });
+
+    it('should be able to retrieve user not self data', function(done) {
+      userIdentificationStub.returns(false); // returns the id of the user
+      userHandler.retrieve('login stubbed out', userData.id, function(error, data) {
+        should.not.exist(error);
+        data.isSelf.should.equal(false);
+
+        delete data.isSelf;
+        delete data.created;
+        userData.profilePictureUrl = '';
+        data.should.eql(userData);
+        done();
+      });
+    });
+
+  });
+
+  describe('#update', function() {
+    it('should be able to tell history to update', function(done) {
+      userIdentificationStub.returns(userData.id); // returns the id of the user
+
+      userHandler.update('login stubbed', userData.id, updatedUser, function(error) {
+        should.not.exist(error);
+
+        var history = new HistoryModel({ entityId: userData.id, subject: 'user', event: 'update' });
+        history.retrieve(function(error, historyData) {
+          var criteria = historyData.params.shift();
+          var updateData = historyData.params.shift();
+
+          criteria.should.eql({ id: userData.id });
+          updateData.should.eql(updatedUser);
+          done();
+        });
+      });
+    });
+
+    it('should be fail on bad email', function(done) {
+      userIdentificationStub.returns(userData.id); // returns the id of the user
+      userHandler.update('login stubbed', userData.id, { handle: 'New User', email: 'badEmail' }, function(error) {
+        should.exist(error);
+        done();
+      });
+    });
+  });
+
+
+  describe('#destroy', function() {
+    it('should be able to destroy a user', function(done) {
+      userIdentificationStub.returns(userData.id); // returns the id of the user
+      userHandler.destroy('login stubbed', userData.id, function(error) {
+        should.not.exist(error);
+
+        var history = new HistoryModel({ entityId: userData.id, subject: 'user', event: 'remove' });
+        history.retrieve(function(error, historyData) {
+          var userId = historyData.params.shift();
+
+          userId.should.equal(userData.id);
+          done();
+        });
+
+      });
+    });
+
+  });
+
+});

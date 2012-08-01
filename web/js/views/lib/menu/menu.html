@@ -1,0 +1,7 @@
+<ul>
+  <% _.each(menuItems, function(item) { %>
+    <li>
+      <a href="<%= item.href %>" <%= item.hasOwnProperty('id') ? 'id="' + item.id + '"' : ''%> <%= typeof item._class != 'undefined' ? 'class="' + item._class +'"' : ''%>><%= item.display %></a>
+    </li>
+  <% }); %>
+</ul>

@@ -1,0 +1,92 @@
+
+var should = require('should');
+var _ = require('underscore');
+
+var store = require(process.env.APP_ROOT + '/store/store.js')('ram');
+var UserModel = require(process.env.APP_ROOT + '/models/user.js')(store);
+
+var userHistorian = require(process.env.APP_ROOT + '/historian/user.js')(store);
+
+describe('User Historian', function() {
+
+  var userData = {
+    id: store.generateId(),
+    handle: 'test user',
+    email: 'someone@somewhere.com',
+    password: 'myRandomPassword!@#$%2343'
+  };
+  var update = { handle: 'updated user' };
+
+  beforeEach(function(done) {
+    // delete all users, then add in the user we want
+    var deleteUsers = new UserModel();
+    deleteUsers.remove(function(error) {
+      var user = new UserModel(userData);
+      user.create(done);
+    });
+  });
+
+  describe('#create', function() {
+    it('should be able to create a user', function(done) {
+
+      // generate create's own id
+      var _userData = _.clone(userData);
+      _userData.id = store.generateId();
+
+      userHistorian.create(_userData, function(error) {
+        should.not.exist(error);
+
+        var user = new UserModel({ id: _userData.id });
+        user.retrieve(function(error, data) {
+          should.not.exist(error);
+
+          delete data.created;
+          data.should.eql(_userData);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('#update', function() {
+    it('should be able to update an existing user', function(done) {
+      userHistorian.update({ id: userData.id }, update, function(error) {
+        should.not.exist(error);
+
+        var user = new UserModel({ id: userData.id });
+        user.retrieve(function(error, storedData) {
+          should.not.exist(error);
+
+          delete storedData.created;
+          storedData.should.eql(_.extend(userData, update));
+          done();
+        });
+      });
+    });
+  });
+
+  describe('#remove', function() {
+    it('should able to remove a user', function(done) {
+      var user = new UserModel({ id: userData.id });
+      user.retrieve(function(error, storedData) {
+        should.not.exist(error);
+
+        delete storedData.created;
+        storedData.should.eql(userData);
+
+        userHistorian.remove(userData.id, function(error) {
+          should.not.exist(error);
+
+          var user = new UserModel({ id: userData.id });
+          user.retrieve(function(error) {
+            should.exist(error);
+
+            done();
+          });
+        });
+      });
+    });
+
+  });
+
+});

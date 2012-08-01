@@ -1,0 +1,4 @@
+*~
+*.swp
+/mytests
+/node_modules
