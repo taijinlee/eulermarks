@@ -13,11 +13,11 @@ module.exports = function(store) {
 
       schema: {
         id: { type: 'string' },
+        login: { type: 'string' },
         email: { type: 'email' },
-        password: { type: 'string' },
         role: { type: 'userRole', defaults: 'user' },
-        imageAssetId: { type: 'string', optional: true },
-        salt: { type: 'string', optional: true },
+        avatarUrl: { type: 'string' },
+        token: { type: 'string' },
         created: { type: 'timestamp', defaults: function() { return new Date().getTime(); } }
       }
 

@@ -1,0 +1,6 @@
+module.exports = {
+  githubOauth: {
+    clientId: 'githubAppClientId',
+    secret: 'githubAppSecret'
+  }
+};

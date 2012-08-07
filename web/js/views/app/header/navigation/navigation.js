@@ -12,19 +12,18 @@ define([
     },
 
     initialize: function(vent, pather, cookie, args) {
-      var routes = [
-        { urlFragment: '/', name: 'Home' },
-        { urlFragment: '/login', name: 'Login', loggedIn: false },
-        { urlFragment: '/signup', name: 'Signup', loggedIn: false },
-        { urlFragment: '/account', name: 'Account', loggedIn: true },
-        { urlFragment: '/logout', name: 'Sign out', loggedIn: true, id: 'logout' }
+      this.routes = [
+        { path: 'homepage', name: 'Home' },
+        { path: 'githubOauth', name: 'Sign in using GitHub', loggedIn: false },
+        { path: 'account', name: 'Account', loggedIn: true },
+        { path: 'logout', name: 'Sign out', loggedIn: true, id: 'logout' }
       ];
 
-      this.navigation = new HorizontalLinksView(vent, pather, cookie, routes);
+      this.navigation = new HorizontalLinksView(vent, pather, cookie);
     },
 
     render: function() {
-      this.$el.append(this.navigation.render().$el);
+      this.$el.append(this.navigation.render(this.routes).$el);
       return this;
     },
 

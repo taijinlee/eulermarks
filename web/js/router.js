@@ -10,9 +10,9 @@ define([
 
     paths: [
       { urlFragment: '', view: 'homepage', symName: 'homepage' },
-      { urlFragment: 'login', view: 'login/login', symName: 'login' },
-      { urlFragment: 'signup', view: 'signup/signup', symName: 'signup' },
-      { urlFragment: 'account', view: 'account/account', symName: 'account', requireLogin: true }
+      { urlFragment: 'account', view: 'account/account', symName: 'account', requireLogin: true },
+      { urlFragment: 'logout', view: '', symName: 'logout' },
+      { urlFragment: 'https://github.com/login/oauth/authorize?client_id=232bd07a87e144588ce1', view: '!external', symName: 'githubOauth' }
     ],
 
     initialize: function(vent) {
@@ -24,8 +24,10 @@ define([
       var self = this;
       _.each(this.paths.reverse(), function(path) {
         var view = path.view;
+        // ignore any empty views or views with ! in the view name
+        if (!view || view.indexOf('!') !== -1) { return; }
+
         self.route(path.urlFragment, view, (function() {
-          // closure here
           var _view = view;
           var requireLogin = path.requireLogin || false;
           return function() {

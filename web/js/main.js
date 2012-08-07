@@ -30,8 +30,14 @@ require([
   // when clicked, we'll use backbone navigate unless ctrl, meta key were held, or if it was not left click
   $('body').on('click', 'a', function(event) {
     if (event.which === 1 && !event.ctrlKey && !event.metaKey) {
-      Backbone.history.navigate($(event.currentTarget).attr('href'), { trigger: true });
-      return false;
+      event.preventDefault();
+      event.stopPropagation();
+      var location = $(event.currentTarget).attr('href');
+      if (location.indexOf('http') !== -1) {
+        window.location = location;
+      } else {
+        Backbone.history.navigate(location, { trigger: true });
+      }
     }
   });
 

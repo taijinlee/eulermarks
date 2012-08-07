@@ -11,26 +11,24 @@ define([
       'class': 'horizontalLink'
     },
 
-    initialize: function(vent, pather, cookie, routes) {
-      if (cookie.get('userId')) {
-        this.loggedIn = true;
-      } else {
-        this.loggedIn = false;
-      }
-
+    initialize: function(vent, pather, cookie) {
+      this.vent = vent; this.pather = pather; this.cookie = cookie;;
       // shown in this order
-      // [ { urlFragment: '/', name: 'Display for Link', loggedIn: true/false, id: linkId }, .. ]
-      this.routes = routes;
+      // [ { path: 'symbolicPatherName', name: 'Display for Link', loggedIn: true/false, id: linkId }, .. ]
     },
 
-    render: function() {
-      _.each(this.routes, function(route) {
-        if (route.loggedIn === true && !this.loggedIn) { // only show if logged in
+    render: function(routes) {
+      var loggedIn = false;
+      if (this.cookie.get('userId')) { loggedIn = true; }
+
+      _.each(routes, function(route) {
+        if (route.loggedIn === true && !loggedIn) { // only show if logged in
           return;
-        } else if (route.loggedIn === false && this.loggedIn) { // only show if logged out
+        } else if (route.loggedIn === false && loggedIn) { // only show if logged out
           return;
         }
 
+        route.urlFragment = this.pather.getUrl(route.path);
         var li = $(this.make('li')).html(_.template(linkTemplate, route));
         this.$el.append(li);
       }, this);

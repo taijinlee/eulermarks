@@ -1,19 +1,26 @@
 
 module.exports = function(app, middlewares, handlers) {
 
+  var OAuth2 = require("oauth").OAuth2;
+  var githubOauthConfig = require('config').githubOauth;
+
   /**
    * Using email and password, logs in an existing user
    */
+  /*
   app.post('/api/auth/login', middlewares.auth.requireLogout, middlewares.auth.login, function(req, res, next) {
     return res.end('ok'); // no error
   });
+  */
+  app.get('/api/auth/github', function(req, res, next) {
+    if (!req.query.code) { return next(new Error('invalid: no github code')); }
+    var oauth = new OAuth2(githubOauthConfig.clientId, githubOauthConfig.secret, "https://github.com", "/login/oauth/authorize", "/login/oauth/access_token");
 
-  /**
-   * TODO: should this be its own method or should this doc be rolled up
-   * to the above mapping?
-   * Using OAuth, logs in an existing user into the system
-   */
-  app.post('/api/auth/login', null /* TODO: figure this out */);
+    oauth.getOAuthAccessToken(req.query.code, {}, function(error, accessToken, refreshToken) {
+      if (error) { return next(new Error('invalid: error from github: ' + error)); }
+      middlewares.auth.githubLogin(req, res, next, accessToken); // ends request
+    });
+  });
 
   /**
    * Logs an existing user out from the system and invalid their credential cookie.

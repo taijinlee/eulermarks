@@ -25,7 +25,13 @@ define([
         throw new Error('path does not exist: ' + symName);
       }
 
-      var url = _formattedPaths[symName].replace(/:(\w+)/g, function(origString, key) {
+      var url = _formattedPaths[symName];
+      if (url.indexOf('http') !== -1) {
+        return url;
+      }
+
+      // substitute
+      var url = url.replace(/:(\w+)/g, function(origString, key) {
         return args.hasOwnProperty(key) ? args[key] : origString;
       });
 
