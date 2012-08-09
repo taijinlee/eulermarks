@@ -5,25 +5,22 @@ define([
   'views/lib/horizontalLinks/horizontalLinks'
 ], function($, _, Backbone, HorizontalLinksView) {
 
-  var NavigationView = Backbone.View.extend({
-    tagName: 'nav',
+  var View = Backbone.View.extend({
     events: {
       'click #logout': 'logout'
     },
 
     initialize: function(vent, pather, cookie, args) {
       this.routes = [
-        { path: 'homepage', name: 'Home' },
-        { path: 'githubOauth', name: 'Sign in using GitHub', loggedIn: false },
-        { path: 'account', name: 'Account', loggedIn: true },
-        { path: 'logout', name: 'Sign out', loggedIn: true, id: 'logout' }
+        { symName: 'githubOauth', name: 'Sign in using GitHub', loggedIn: false },
+        { symName: 'logout', name: 'Sign out', loggedIn: true, id: 'logout' }
       ];
 
       this.navigation = new HorizontalLinksView(vent, pather, cookie);
     },
 
     render: function() {
-      this.$el.append(this.navigation.render(this.routes).$el);
+      this.$el.html(this.navigation.render(this.routes).$el);
       return this;
     },
 
@@ -37,11 +34,12 @@ define([
           Backbone.history.navigate('', true);
         }
       });
+      return false;
     }
 
 
   });
 
-  return NavigationView;
+  return View;
 
 });

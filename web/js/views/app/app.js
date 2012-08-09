@@ -7,7 +7,7 @@ define([
   'views/app/footer/footer'
 ], function($, _, Backbone, HeaderView, NotificationsView, FooterView) {
 
-  var AppView = Backbone.View.extend({
+  var View = Backbone.View.extend({
 
     el: $('#container'),
 
@@ -15,18 +15,15 @@ define([
       this.vent = vent;
 
       this.header = new HeaderView(vent, pather, cookie, args);
-      this.notifications = new NotificationsView(vent, pather, cookie, args);
+      // this.notifications = new NotificationsView(vent, pather, cookie, args);
       this.footer = new FooterView(vent, pather, cookie, args);
     },
 
     render: function(view) {
-      this.$el.empty();
-      this.$el.append(
-        this.header.render().$el.addClass('row'),
-        this.notifications.render().$el.addClass('row'),
-        view.render().$el.addClass('row'),
-        this.footer.render().$el.addClass('row')
-      );
+      this.header.setElement(this.$('#app-header')).render();
+      // this.notifications.setElement(this.$('#app-notifications')).render();
+      view.setElement(this.$('#app-body')).render();
+      this.footer.setElement(this.$('#app-footer')).render();
       return this;
     },
 
@@ -36,6 +33,6 @@ define([
 
   });
 
-  return AppView;
+  return View;
 
 });

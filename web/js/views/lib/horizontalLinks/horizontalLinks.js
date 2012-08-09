@@ -14,7 +14,7 @@ define([
     initialize: function(vent, pather, cookie) {
       this.vent = vent; this.pather = pather; this.cookie = cookie;;
       // shown in this order
-      // [ { path: 'symbolicPatherName', name: 'Display for Link', loggedIn: true/false, id: linkId }, .. ]
+      // [ { symName: 'symbolicPatherName', name: 'Display for Link', loggedIn: true/false, id: linkId }, .. ]
     },
 
     render: function(routes) {
@@ -28,7 +28,7 @@ define([
           return;
         }
 
-        route.urlFragment = this.pather.getUrl(route.path);
+        route.urlFragment = this.pather.getUrl(route.symName);
         var li = $(this.make('li')).html(_.template(linkTemplate, route));
         this.$el.append(li);
       }, this);

@@ -5,24 +5,22 @@ define([
   'views/lib/horizontalLinks/horizontalLinks'
 ], function($, _, Backbone, HorizontalLinksView) {
 
-  var NavigationView = Backbone.View.extend({
-    tagName: 'nav',
-
+  var View = Backbone.View.extend({
     initialize: function(vent, pather, cookie, args) {
-      var routes = [
-        { urlFragment: '/', name: 'About' },
-        { urlFragment: '/', name: 'Contact' }
+      this.routes = [
+        { symName: 'homepage', name: 'About' },
+        { symName: 'homepage', name: 'Contact' }
       ];
 
-      this.navigation = new HorizontalLinksView(vent, pather, cookie, routes);
+      this.navigation = new HorizontalLinksView(vent, pather, cookie);
     },
 
     render: function() {
-      this.$el.append(this.navigation.render().$el);
+      this.$el.html(this.navigation.render(this.routes).$el);
       return this;
     }
 
   });
 
-  return NavigationView;
+  return View;
 });

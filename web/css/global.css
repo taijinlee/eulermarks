@@ -3,7 +3,7 @@
 
 .container > section { padding-top: 30px; }
 
-#header nav { text-align: right; }
+#app-header-navigation { text-align: right; }
 
 
 .horizontalList { margin: 0; list-style: none; }

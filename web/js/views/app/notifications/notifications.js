@@ -6,8 +6,6 @@ define([
 ], function($, _, Backbone, notificationsTemplate) {
 
   var NotificationsView = Backbone.View.extend({
-    tagName: 'div',
-
     events: {
       'click a.alert_close': 'closeNotification'
     },
@@ -25,7 +23,7 @@ define([
       $(this.el).attr('class', 'eight columns offset-by-four alert-box ' + alert_type);
 
       $(this.el).html(_.template(notificationsTemplate, {'message': message}));
-      $('section#notifications').append($(this.el));
+      $('#app-notifications').append($(this.el));
       this.delegateEvents();
     },
 

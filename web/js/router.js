@@ -10,8 +10,9 @@ define([
 
     paths: [
       { urlFragment: '', view: 'homepage', symName: 'homepage' },
-      { urlFragment: 'account', view: 'account/account', symName: 'account', requireLogin: true },
       { urlFragment: 'logout', view: '', symName: 'logout' },
+      { urlFragment: '*userLogin', view: 'user', symName: 'user', requireLogin: true },
+      /* external links */
       { urlFragment: 'https://github.com/login/oauth/authorize?client_id=232bd07a87e144588ce1', view: '!external', symName: 'githubOauth' }
     ],
 

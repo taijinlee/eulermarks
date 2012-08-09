@@ -75,7 +75,6 @@ module.exports = function(store, cookieJar) {
         var userData = {
           id: results.githubUser.login,
           login: results.githubUser.login,
-          email: results.githubUser.email,
           avatarUrl: String(results.githubUser.avatar_url),
           token: githubToken,
         };
@@ -84,9 +83,9 @@ module.exports = function(store, cookieJar) {
     }, function(error, results) {
       if (error) { return next(error); }
       provisionToken(req, res, next, results.githubUser.login);
-      // redirect back to homepage
+      // redirect to user's page
       res.writeHead(303, {
-        Location: '/'
+        Location: '/' + results.githubUser.login
       });
       res.end();
     });

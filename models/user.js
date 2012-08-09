@@ -14,7 +14,6 @@ module.exports = function(store) {
       schema: {
         id: { type: 'string' },
         login: { type: 'string' },
-        email: { type: 'email' },
         role: { type: 'userRole', defaults: 'user' },
         avatarUrl: { type: 'string' },
         token: { type: 'string' },
