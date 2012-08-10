@@ -5,12 +5,7 @@ define([
   'text!./link.html'
 ], function($, _, Backbone, linkTemplate) {
 
-  var HorizontalLinksView = Backbone.View.extend({
-    tagName: 'ul',
-    attributes: {
-      'class': 'horizontalLink'
-    },
-
+  var View = Backbone.View.extend({
     initialize: function(vent, pather, cookie) {
       this.vent = vent; this.pather = pather; this.cookie = cookie;;
       // shown in this order
@@ -21,6 +16,8 @@ define([
       var loggedIn = false;
       if (this.cookie.get('userId')) { loggedIn = true; }
 
+      var $ul = $(this.make('ul', { 'class': 'horizontalLink' }));
+
       _.each(routes, function(route) {
         if (route.loggedIn === true && !loggedIn) { // only show if logged in
           return;
@@ -29,14 +26,15 @@ define([
         }
 
         route.urlFragment = this.pather.getUrl(route.symName);
-        var li = $(this.make('li')).html(_.template(linkTemplate, route));
-        this.$el.append(li);
+        $ul.append(_.template(linkTemplate, route));
       }, this);
+
+      this.$el.append($ul);
       return this;
     }
 
   });
 
-  return HorizontalLinksView;
+  return View;
 
 });
