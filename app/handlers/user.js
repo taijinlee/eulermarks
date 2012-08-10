@@ -60,10 +60,7 @@ module.exports = function(store, history) {
     var user = new UserModel(_.extend({ id: userId }, updateData), { parse: true });
     if (!user.isExistingFieldsValid()) { return callback(new Error('invalid')); }
 
-    history.record(tokenUserId, 'user', 'update', userId, [{ id: userId }, updateData], function(error) {
-      if (error) { return callback(error); }
-      return callback(null);
-    });
+    history.record(tokenUserId, 'user', 'update', userId, [{ id: userId }, updateData], callback);
   };
 
   var destroy = function(tokenUserId, userId, callback) {
@@ -72,10 +69,7 @@ module.exports = function(store, history) {
     var user = new UserModel({ id: userId });
     if (!user.isExistingFieldsValid()) { return callback(new Error('invalid')); }
 
-    history.record(tokenUserId, 'user', 'remove', userId, [userId], function(error) {
-      if (error) { return callback(error); }
-      return callback(null);
-    });
+    history.record(tokenUserId, 'user', 'remove', userId, [userId], callback);
   };
 
   return {

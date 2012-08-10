@@ -4,34 +4,37 @@ define([
   'backbone'
 ], function($, _, Backbone) {
 
-  var ProfilePictureView = Backbone.View.extend({
-    tagName: 'section',
+  var View = Backbone.View.extend({
     attributes: {
       'class': 'profilePicture'
     },
 
-    initialize: function(vent, pather, cookie, args) {
-
+    initialize: function(vent, pather, cookie) {
     },
 
-    render: function(profileType, imgSrc, caption, profileUrl) {
-      this.$el.addClass(profileType);
+    render: function(imgSrc, altText, caption, profileUrl) {
+      var imageEl = this.make('img', { 'class': 'thumbnail', src: imgSrc, alt: altText });
 
-      var image = this.make('img', { 'class': 'thumbnail', src: imgSrc });
-      // wrap it in a link if we have a url
-      if (profileUrl) {
-        image = this.make('a', { href: profileUrl }, image);
-      }
-      this.$el.append(image);
-
+      var captionEl;
       if (caption !== undefined && caption.trim().length) {
-        this.$el.append(this.make('aside', { 'class': 'cpation' }, caption));
+        captionEl = this.make('aside', { 'class': 'caption' }, caption)
+      }
+
+      // wrap image and caption links if we have url
+      if (profileUrl) {
+        imageEl = this.make('a', { href: profileUrl }, imageEl);
+        captionEl = captionEl ? this.make('a', { href: profileUrl }, captionEl) : captionEl;
+      }
+
+      this.$el.html(imageEl);
+      if (captionEl) {
+        this.$el.append(captionEl);
       }
 
       return this;
     }
 
   });
-  return ProfilePictureView;
+  return View;
 
 });

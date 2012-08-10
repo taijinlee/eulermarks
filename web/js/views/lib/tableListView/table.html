@@ -1,0 +1,20 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <% for (var i = 0; i < headers.length; i++) { %>
+        <th><%= headers[i] %></th>
+      <% } %>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (var dataIndex = 0; dataIndex < data.length; dataIndex++) { %>
+      <% var rowData = data[dataIndex]; %>
+      <tr>
+        <% for (var headerIndex = 0; headerIndex < headerKeys.length; headerIndex++) { %>
+          <% var key = headerKeys[headerIndex]; %>
+          <td><%= rowData[key] %></td>
+        <% } %>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
