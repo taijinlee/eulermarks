@@ -29,7 +29,7 @@ define([
       var self = this;
       $('#uploader').ajaxSubmit({
         success: function(response) {
-          console.log(response);
+          // console.log(response);
           // self.vent.trigger('asset_uploaded', [JSON.parse(response)]);
         }
       });

@@ -2,21 +2,22 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/user'
-], function($, _, Backbone, UserModel) {
+  'models/user',
+  'text!./user.html'
+], function($, _, Backbone, UserModel, userTemplate) {
 
   var View = Backbone.View.extend({
-    tagName: 'section',
-
     initialize: function(vent, pather, cookie, args) {
       this.vent = vent; this.pather = pather; this.cookie = cookie;
 
-      var userId = cookie.get('userId');
+      var userId = args[0];
       this.user = new UserModel({ id: userId });
-      //this.vent.on('load:user', this.renderAccountForm, this);
+      this.vent.on('load:user', this.renderUserDetails, this);
     },
 
     render: function(id) {
+      this.$el.html(_.template(userTemplate));
+
       var self = this;
       this.user.fetch({
         success: function(user, response) {
@@ -29,9 +30,10 @@ define([
       return this;
     },
 
-    renderAccountForm: function(user) {
-      this.$el.html($(_.template(accountTemplate, user.toJSON())).addClass('span6 offset3'));
-      this.$el.append(this.assetUploader.render(user.get('id'), 'user').el);
+    renderUserDetails: function(user) {
+      // this.$el.html($(_.template(accountTemplate, user.toJSON())).addClass('span6 offset3'));
+      // this.$el.append(this.assetUploader.render(user.get('id'), 'user').el);
+      console.log('hi');
       return this;
     }
 
