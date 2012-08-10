@@ -10,16 +10,15 @@ define([
 
     paths: [
       { urlFragment: '', view: 'homepage', symName: 'homepage' },
-      { urlFragment: 'logout', view: '', symName: 'logout' },
+      { urlFragment: 'logout', view: 'logout', symName: 'logout' },
       { urlFragment: '*userLogin', view: 'user', symName: 'user', requireLogin: true },
       /* external links */
       { urlFragment: 'https://github.com/login/oauth/authorize?client_id=232bd07a87e144588ce1', view: '!external', symName: 'githubOauth' }
     ],
 
     initialize: function(vent) {
-      this.vent = vent;
-      this.pather = new Pather(this.paths);
-      this.cookie = null;
+      this.vent = vent; this.pather = new Pather(this.paths); this.cookie = new CookieModel();
+      this.app = new AppView(this.vent, this.pather, this.cookie);
 
       // going backwards for backbone compatability
       var self = this;
@@ -34,7 +33,8 @@ define([
           return function() {
             var regex = (document.cookie.search(';') === -1) ? /c=(.*)/ : /c=(.*?);/;
             var cookieJSON = document.cookie ? $.parseJSON(decodeURIComponent(regex.exec(document.cookie)[1])) : {};
-            self.cookie = new CookieModel(cookieJSON);
+            self.cookie.clear({ silent: true });
+            self.cookie.set(cookieJSON, { silent: true });
 
             // boot back to homepage if we require a login, and we don't have one
             if (requireLogin && (!self.cookie || !self.cookie.get('userId'))) {
@@ -55,16 +55,15 @@ define([
       var args = Array().slice.call(arguments);
       var view = args.shift();
       var self = this;
-      var app = new AppView(self.vent, self.pather, self.cookie, args);
 
       require([
         'views/' + view
       ], function(View) {
         $(window).unbind();
-
         self.vent.unbind();
+
         // self.AppView.bindNotifications();
-        app.render(new View(self.vent, self.pather, self.cookie, args));
+        self.app.render(new View(self.vent, self.pather, self.cookie, args));
       });
     },
 

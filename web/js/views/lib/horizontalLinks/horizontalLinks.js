@@ -7,7 +7,7 @@ define([
 
   var View = Backbone.View.extend({
     initialize: function(vent, pather, cookie) {
-      this.vent = vent; this.pather = pather; this.cookie = cookie;;
+      this.vent = vent; this.pather = pather; this.cookie = cookie;
       // shown in this order
       // [ { symName: 'symbolicPatherName', name: 'Display for Link', loggedIn: true/false, id: linkId }, .. ]
     },
@@ -17,7 +17,6 @@ define([
       if (this.cookie.get('userId')) { loggedIn = true; }
 
       var $ul = $(this.make('ul', { 'class': 'horizontalLink' }));
-
       _.each(routes, function(route) {
         if (route.loggedIn === true && !loggedIn) { // only show if logged in
           return;

@@ -8,15 +8,14 @@ define([
 ], function($, _, Backbone, HeaderView, NotificationsView, FooterView) {
 
   var View = Backbone.View.extend({
-
     el: $('#container'),
 
-    initialize: function(vent, pather, cookie, args) {
+    initialize: function(vent, pather, cookie) {
       this.vent = vent;
 
-      this.header = new HeaderView(vent, pather, cookie, args);
+      this.header = new HeaderView(vent, pather, cookie);
       // this.notifications = new NotificationsView(vent, pather, cookie, args);
-      this.footer = new FooterView(vent, pather, cookie, args);
+      this.footer = new FooterView(vent, pather, cookie);
     },
 
     render: function(view) {
@@ -30,7 +29,6 @@ define([
     bindNotifications: function() {
       this.notifications.bind();
     }
-
   });
 
   return View;
