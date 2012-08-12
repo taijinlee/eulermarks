@@ -4,14 +4,9 @@ if (process.env.NODE_ENV === undefined) {
 if (process.env.APP_ROOT === undefined) {
   throw new Error('APP_ROOT not set. Try ~/eulermarks or /service/eulermarks');
 }
-if (process.env.APP_PORT === undefined) {
-  throw new Error('APP_PORT not set. Try 3000');
-}
-if (process.env.APP_HOST === undefined) {
-  throw new Error('APP_HOST not set. Try localhost:3000');
-}
 
 var express = require('express');
+var appConfig = require('config').app;
 var logger = require(process.env.APP_ROOT + '/logger/logger.js')();
 var app = express.createServer();
 
@@ -68,5 +63,5 @@ app.configure('prod', function () {
 require(process.env.APP_ROOT + '/app/routes.js')(app, store, history);
 
 // start listening
-app.listen(process.env.APP_PORT);
+app.listen(appConfig.port);
 logger.log({ message: 'server start', port: app.address().port });

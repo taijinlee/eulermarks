@@ -1,4 +1,9 @@
 module.exports = {
+  app: {
+    port: 4000,
+    host: 'localhost:4000'
+  },
+
   githubOauth: {
     clientId: 'githubAppClientId',
     secret: 'githubAppSecret'

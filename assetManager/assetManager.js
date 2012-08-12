@@ -1,6 +1,7 @@
 
 module.exports = function(store) {
 
+  var appConfig = require('config').app;
   var crypto = require('crypto');
   var async = require('async');
   var AssetBlob = require(process.env.APP_ROOT + '/models/assetBlob.js')(store);
@@ -54,7 +55,7 @@ module.exports = function(store) {
       if (error) { return callback(error); }
       // if s3 down then return a different url: unimplemented
 
-      var url = '//' + process.env.APP_HOST + '/asset/' + asset.get('assetBlobHash');
+      var url = '//' + appConfig.host + '/asset/' + asset.get('assetBlobHash');
       return callback(null, url);
     });
   };

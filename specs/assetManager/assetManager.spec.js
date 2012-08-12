@@ -2,6 +2,7 @@
 var should = require('should');
 var _ = require('underscore');
 
+var appConfig = require('config').app;
 var store = require(process.env.APP_ROOT + '/store/store.js')('ram');
 var Asset = require(process.env.APP_ROOT + '/models/asset.js')(store);
 var AssetBlob = require(process.env.APP_ROOT + '/models/assetBlob.js')(store);
@@ -73,7 +74,7 @@ describe('Asset Manager', function() {
         should.not.exist(error);
 
         // not taking s3 logic into account yet
-        url.should.equal('//' + process.env.APP_HOST + '/asset/' + _asset.assetBlobHash);
+        url.should.equal('//' + appConfig.host + '/asset/' + _asset.assetBlobHash);
         done();
       });
     });

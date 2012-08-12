@@ -1,14 +1,13 @@
 APP_ROOT = `pwd`
-APP_PORT = 4000
 
 console:
-	NODE_ENV=dev APP_ROOT=${APP_ROOT} APP_PORT=${APP_PORT} APP_HOST=localhost:${APP_PORT} node
+	NODE_ENV=dev APP_ROOT=${APP_ROOT} node
 
 versions:
 	node config/util/packageVersions.js
 
 test:
-	NODE_ENV=test APP_ROOT=${APP_ROOT} APP_PORT=${APP_PORT} APP_HOST=localhost:${APP_PORT} find specs -type f -a -name *.spec.js -exec ./node_modules/mocha/bin/mocha --globals requirejsVars -R list --require should {} \;
+	NODE_ENV=test APP_ROOT=${APP_ROOT}  find specs -type f -a -name *.spec.js -exec ./node_modules/mocha/bin/mocha --globals requirejsVars -R list --require should {} \;
 
 lint:
 	find . -type f -a ! -path './mytests/*' -a ! -path './.git/*' -a ! -path './web/*' -a ! -path './node_modules/*' -exec ./node_modules/jshint/bin/hint {} --config config/build/jshint.config.json \;
@@ -21,9 +20,9 @@ clean:
 	rm -Rf web-build
 
 run-dev:
-	NODE_ENV=dev APP_ROOT=${APP_ROOT} APP_PORT=${APP_PORT} APP_HOST=localhost:${APP_PORT} node config/build/mongoIndexes.js
-	NODE_ENV=dev APP_ROOT=${APP_ROOT} APP_PORT=${APP_PORT} APP_HOST=localhost:${APP_PORT} node app/server.js
+	NODE_ENV=dev APP_ROOT=${APP_ROOT} node config/build/mongoIndexes.js
+	NODE_ENV=dev APP_ROOT=${APP_ROOT} node app/server.js
 
 run-prod:
-	NODE_ENV=prod APP_ROOT=${APP_ROOT} APP_PORT=${APP_PORT} APP_HOST=localhost:${APP_PORT} node config/build/mongoIndexes.js
-	NODE_ENV=prod APP_ROOT=${APP_ROOT} APP_PORT=${APP_PORT} APP_HOST=localhost:${APP_PORT} node app/server.js
+	NODE_ENV=prod APP_ROOT=${APP_ROOT} node config/build/mongoIndexes.js
+	NODE_ENV=prod APP_ROOT=${APP_ROOT} node app/server.js
