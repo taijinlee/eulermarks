@@ -52,7 +52,7 @@ define([
       var keys = [
         { key: 'name', display: 'Repository' },
         { key: 'status', display: 'Status' },
-        { key: 'actions', display: this.make('select').outerHTML }
+        { key: 'actions', display: this.make('aside', { id: 'repo-selector' }).outerHTML }
       ];
       this.reposTable.setElement(this.$('#user-repos')).render(keys, repos.map(function(model) { return model.toJSON(); }));
       this.unregisteredRepos.fetch({
@@ -62,20 +62,21 @@ define([
     },
 
     renderUnregisteredRepos: function(unregisteredRepos) {
-      var select = this.reposTable.$('select')
+      var select = $(this.make('select'));
       select.append(this.make('option', {}, ''));
 
       var self = this;
       unregisteredRepos.each(function(repo) {
         select.append(self.make('option', {}, repo.get('name')));
       });
-      console.log(select);
 
-      $(select).select2({
+      this.reposTable.$('#repo-selector').html(select);
+      select.select2({
         placeholder: 'Link repository',
         allowClear: true,
         width: '300px'
       });
+
       return this;
     },
 
