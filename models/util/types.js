@@ -37,6 +37,10 @@ define([
     timestamp: {
       checkType: function(value) { return _validator().check(value).isInt(); }
     },
+    url: {
+      checkType: function(value) { return _validator().check(value).isUrl(); },
+      sanitize: function(value) { return String(value); }
+    },
     userRole: {
       checkType: function(value) { return _validator().check(value).isIn(['user', 'admin']); }
     },
