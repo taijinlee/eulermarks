@@ -56,7 +56,6 @@ define([
     },
 
     renderUserRepos: function() {
-      console.log(repos);
       var keys = [
         { key: 'name', display: 'Repository' },
         { key: 'status', display: 'Status' },
