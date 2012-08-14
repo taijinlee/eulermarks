@@ -3,6 +3,7 @@ module.exports = function(store, history) {
   var async = require('async');
   var _ = require('underscore');
 
+  var github = require(process.env.APP_ROOT + '/github/github.js')();
   var RepoModel = require(process.env.APP_ROOT + '/models/repo.js')(store);
   var WebRepoModel = require(process.env.APP_ROOT + '/models/webModel.js')(store, 'repo');
 
@@ -54,12 +55,29 @@ module.exports = function(store, history) {
     });
   };
 
+  var unregistered = function(userId, callback) {
+    async.auto({
+      githubRepos: async.apply(github.userGithubRepos, userId),
+      registeredRepos: async.apply(list, { userId: userId }, 0, 0)
+    }, function(error, results) {
+      if (error) { return callback(error); }
+
+      var registeredRepoNames = _.pluck(results.registeredRepos, 'name');
+      var unregisteredRepos = _.filter(results.githubRepos, function(githubRepo) {
+        if (_.include(registeredRepoNames, githubRepo.name)) { return false; }
+        return true;
+      });
+      return callback(null, unregisteredRepos);
+    });
+  };
+
   return {
     create: create,
     retrieve: retrieve,
     update: update,
     destroy: destroy,
-    list: list
+    list: list,
+    unregistered: unregistered
   };
 
 };

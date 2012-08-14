@@ -6,8 +6,9 @@ define([
   'collections/repos',
   'views/lib/profilePicture/profilePicture',
   'views/lib/tableListView/tableListView',
-  'text!./user.html'
-], function($, _, Backbone, UserModel, RepoCollection, ProfilePictureView, TableListView, userTemplate) {
+  'text!./user.html',
+  'select2'
+], function($, _, Backbone, UserModel, RepoCollection, ProfilePictureView, TableListView, userTemplate, select2Dummy) {
 
   var View = Backbone.View.extend({
     initialize: function(vent, pather, cookie, args) {
@@ -19,6 +20,10 @@ define([
 
       this.repos = new RepoCollection();
       this.repos.on('reset', this.renderUserRepos, this);
+
+      this.unregisteredRepos = new RepoCollection();
+      this.unregisteredRepos.url = '/api/repo/unregistered';
+      this.unregisteredRepos.on('reset', this.renderUnregisteredRepos, this);
 
       this.profile = new ProfilePictureView();
       this.reposTable = new TableListView();
@@ -44,12 +49,33 @@ define([
     },
 
     renderUserRepos: function(repos) {
-      if (repos.isEmpty()) {
-        this.$('#user-repos').html(this.make('p', {}, 'No repositories linked. Link one now'));
-      } else {
-        var keys = [{ key: 'name', display: 'Repository' }];
-        this.reposTable.setElement(this.$('#user-repos')).render(keys, repos.map(function(model) { return model.toJSON(); }));
-      }
+      var keys = [
+        { key: 'name', display: 'Repository' },
+        { key: 'status', display: 'Status' },
+        { key: 'actions', display: this.make('select').outerHTML }
+      ];
+      this.reposTable.setElement(this.$('#user-repos')).render(keys, repos.map(function(model) { return model.toJSON(); }));
+      this.unregisteredRepos.fetch({
+        data: { userId: this.userId }
+      });
+      return this;
+    },
+
+    renderUnregisteredRepos: function(unregisteredRepos) {
+      var select = this.reposTable.$('select')
+      select.append(this.make('option', {}, ''));
+
+      var self = this;
+      unregisteredRepos.each(function(repo) {
+        select.append(self.make('option', {}, repo.get('name')));
+      });
+      console.log(select);
+
+      $(select).select2({
+        placeholder: 'Link repository',
+        allowClear: true,
+        width: '300px'
+      });
       return this;
     },
 

@@ -7,7 +7,6 @@ module.exports = function(store, history) {
   var UserModel = require(process.env.APP_ROOT + '/models/user.js')(store);
   var WebUserModel = require(process.env.APP_ROOT + '/models/webModel.js')(store, 'user');
 
-  var assetManager = require(process.env.APP_ROOT + '/assetManager/assetManager.js')(store);
   var tokenizer = require(process.env.APP_ROOT + '/tokenizer/tokenizer.js')();
 
   /* Basic crud */
@@ -43,14 +42,10 @@ module.exports = function(store, history) {
     var user = new UserModel({ id: userId });
     if (!user.isExistingFieldsValid()) { return callback(new Error('invalid')); }
 
-    user.retrieve(function(error, data) {
+    user.retrieve(function(error, userData) {
       if (error) { return callback(error); }
-      data.isSelf = isSelf;
-      assetManager.getUrl(data.imageAssetId, function(error, url) {
-        if (error && error.message !== 'notFound') { return callback(error); }
-        data.profilePictureUrl = (error) ? '' : url;
-        return callback(null, data);
-      });
+      var webUser = new WebUserModel(userData).toJSON();
+      return callback(null, webUser);
     });
   };
 

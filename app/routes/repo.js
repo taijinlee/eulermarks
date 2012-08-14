@@ -1,6 +1,13 @@
 
 module.exports = function(app, middlewares, handlers) {
 
+  app.get('/api/repo/unregistered', middlewares.entity.exists('user'), function(req, res, next) {
+    handlers.repo.unregistered(req.param('userId'), function(error, repos) {
+      if (error) { return next(error); }
+      return res.json(repos);
+    });
+  });
+
   app.post('/api/repo', function(req, res, next) {
     var repoData = req.body;
     handlers.repo.create(repoData, function(error, repoData) {

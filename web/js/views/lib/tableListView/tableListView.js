@@ -14,7 +14,11 @@ define([
       // rowKeys: [{ key: key, display: displayName }, ... ]
       // data: [{ key1: value1, key2: value2 }, { key1: value1, key2: value2 }, ... ]
 
-      this.$el.html(_.template(tableTemplate, { headers: _.pluck(rowKeys, 'display'), headerKeys: _.pluck(rowKeys, 'key'), data: data }));
+      this.$el.html(_.template(tableTemplate, {
+        headers: _.pluck(rowKeys, 'display'),
+        headerKeys: _.pluck(rowKeys, 'key'),
+        data: data
+      }));
       return this;
     }
 

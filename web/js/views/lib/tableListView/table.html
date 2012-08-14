@@ -7,6 +7,10 @@
     </tr>
   </thead>
   <tbody>
+    <% if (!data.length) { %>
+      <tr><td colspan="0">No repositories linked. Link one from the dropdown in top right corner</td></tr>
+    <% } %>
+
     <% for (var dataIndex = 0; dataIndex < data.length; dataIndex++) { %>
       <% var rowData = data[dataIndex]; %>
       <tr>
