@@ -27,7 +27,7 @@ module.exports = function(app, middlewares, handlers) {
     var updateData = req.body;
     handlers.repo.update(req.auth.tokenUserId, req.params.repoId, updateData, function(error) {
       if (error) { return next(error); }
-      return res.end('ok');
+      return res.json({});
     });
   });
 

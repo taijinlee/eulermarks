@@ -9,7 +9,7 @@ module.exports = function(store, history) {
 
   /* Basic crud */
   var create = function(repoData, callback) {
-    repoData.id = store.generateId();
+    repoData.id = repoData.userId + '/' + repoData.name;
     var repo = new RepoModel(repoData);
     if (!repo.isValid()) { return callback(new Error('Invalid')); }
 
