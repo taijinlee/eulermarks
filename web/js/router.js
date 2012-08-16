@@ -11,7 +11,9 @@ define([
     paths: [
       { urlFragment: '', view: 'homepage', symName: 'homepage' },
       { urlFragment: 'logout', view: 'logout', symName: 'logout' },
-      { urlFragment: '*userLogin', view: 'user/user', symName: 'user', requireLogin: true },
+      { urlFragment: ':userId', view: 'user/user', symName: 'user', requireLogin: true },
+      { urlFragment: ':userId/:repoName', view: 'repo/repo', symName: 'repo', requireLogin: true },
+
       /* external links */
       { urlFragment: 'https://github.com/login/oauth/authorize?client_id=232bd07a87e144588ce1', view: '!external', symName: 'githubOauth' }
     ],

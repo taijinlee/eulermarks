@@ -40,7 +40,7 @@ define([
       this.reposTable = new TableListView();
     },
 
-    render: function(id) {
+    render: function() {
       this.$el.html(_.template(userTemplate));
 
       var self = this;
@@ -66,13 +66,17 @@ define([
 
     renderUserRepos: function() {
       var keys = [
-        { key: 'name', display: 'Repository' },
+        { key: 'repoLink', display: 'Repository' },
         { key: 'status', display: 'Status' },
         { key: 'actions', display: '' }
       ];
 
-      var reposWithAction = this.repos.map(function(model) {
-        return _.extend(model.toJSON(), {'actions': this.make('button', { 'class': 'btn btn-danger user-repoUnlink', 'data-repoName': model.get('name') }, 'Unlink').outerHTML });
+      var reposWithAction = this.repos.map(function(repo) {
+        var repoJSON = repo.toJSON();
+        var repoPath = this.pather.getUrl('repo', { userId: repoJSON.userId, repoName: repoJSON.name });
+        repoJSON.repoLink = this.make('a', { 'href': repoPath }, repoJSON.name).outerHTML;
+        repoJSON.actions = this.make('button', { 'class': 'btn btn-danger user-repoUnlink', 'data-repoName': repoJSON.name }, 'Unlink').outerHTML;
+        return repoJSON;
       }, this);
 
       this.reposTable.setElement(this.$('#user-repos')).render(keys, reposWithAction);
