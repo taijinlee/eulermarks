@@ -7,30 +7,34 @@ define([
   'views/lib/profilePicture/profilePicture',
   'views/lib/tableListView/tableListView',
   'text!./user.html',
+  'text!./repoSelector.html',
   'select2'
-], function($, _, Backbone, UserModel, RepoCollection, ProfilePictureView, TableListView, userTemplate, select2Dummy) {
+], function($, _, Backbone, UserModel, RepoCollection, ProfilePictureView, TableListView, userTemplate, repoSelectorTemplate, select2Dummy) {
 
   var View = Backbone.View.extend({
     events: {
-      'click #linkRepo': 'linkRepo'
+      'click #linkRepo': 'linkRepo',
+      'click .user-repoUnlink': 'unlinkRepo'
     },
-
 
     initialize: function(vent, pather, cookie, args) {
       this.vent = vent; this.pather = pather; this.cookie = cookie;
 
       this.userId = args[0];
       this.user = new UserModel({ id: this.userId });
-      this.vent.on('load:user', this.renderUserDetails, this);
+      this.user.on('change', this.renderUserDetails, this);
 
       this.repos = new RepoCollection();
       this.repos.on('reset', this.renderUserRepos, this);
       this.repos.on('add', this.renderUserRepos, this);
+      this.repos.on('remove', this.renderUserRepos, this);
+
 
       this.unregisteredRepos = new RepoCollection();
       this.unregisteredRepos.url = '/api/repo/unregistered';
       this.unregisteredRepos.on('reset', this.renderUnregisteredRepos, this);
-      this.unregisteredRepos.on('remove', this.renderUnregisteredRepos, this);
+      this.unregisteredRepos.on('add', this.populateSelect, this);
+      this.unregisteredRepos.on('remove', this.populateSelect, this);
 
       this.profile = new ProfilePictureView();
       this.reposTable = new TableListView();
@@ -52,6 +56,11 @@ define([
       this.repos.fetch({
         data: { userId: this.userId }
       });
+
+      this.unregisteredRepos.fetch({
+        data: { userId: this.userId }
+      });
+
       return this;
     },
 
@@ -59,36 +68,43 @@ define([
       var keys = [
         { key: 'name', display: 'Repository' },
         { key: 'status', display: 'Status' },
-        { key: 'actions', display: this.make('aside', { id: 'repo-selector' }).outerHTML }
+        { key: 'actions', display: '' }
       ];
-      var self = this;
-      this.reposTable.setElement(this.$('#user-repos')).render(keys, self.repos.map(function(model) { return model.toJSON(); }));
-      this.unregisteredRepos.fetch({
-        data: { userId: this.userId }
-      });
+
+      var reposWithAction = this.repos.map(function(model) {
+        return _.extend(model.toJSON(), {'actions': this.make('button', { 'class': 'btn btn-danger user-repoUnlink', 'data-repoName': model.get('name') }, 'Unlink').outerHTML });
+      }, this);
+
+      this.reposTable.setElement(this.$('#user-repos')).render(keys, reposWithAction);
       return this;
     },
 
     renderUnregisteredRepos: function() {
+      var repoSelector = this.$('#user-linkRepo');
       var select = $(this.make('select'));
       select.append(this.make('option', {}, ''));
 
-      var self = this;
-      this.unregisteredRepos.each(function(repo) {
-        select.append(self.make('option', { value: repo.get('name') }, repo.get('name')));
-      });
+      repoSelector.append(select);
 
-      var repoSelector = this.reposTable.$('#repo-selector');
-      repoSelector.html(select);
+      this.populateSelect();
       select.select2({
         placeholder: 'Link repository',
         allowClear: true,
         width: '300px'
       });
 
-      var linkRepoButton = this.make('button', { 'class': 'btn', id: 'linkRepo' }, 'Link');
-      repoSelector.append(linkRepoButton);
+      repoSelector.append(this.make('button', { 'class': 'btn', id:'linkRepo' }, 'Link'));
 
+      return this;
+    },
+
+    populateSelect: function() {
+      var select = this.$('#user-linkRepo select');
+
+      select.find('option:gt(0)').remove();
+      this.unregisteredRepos.each(function(repo) {
+        select.append(this.make('option', { value: repo.get('name') }, repo.get('name')));
+      }, this);
       return this;
     },
 
@@ -99,7 +115,7 @@ define([
     },
 
     linkRepo: function(event) {
-      var select = this.reposTable.$('#repo-selector select');
+      var select = this.$('#user-linkRepo select');
       var repoName = select.select2('val');
       if (!repoName) {
         return false; // do nothing
@@ -109,10 +125,28 @@ define([
       var self = this;
       repo.save({}, {
         success: function() {
+          select.select2('val', '');
           self.unregisteredRepos.remove(repo);
           self.repos.add(repo);
         }
       });
+    },
+
+    unlinkRepo: function(event) {
+      var repoName = $(event.currentTarget).attr('data-repoName');
+      var repo = this.repos.find(function(repo) { return repo.get('name') === repoName; });
+
+      var self = this;
+      var select = this.$('#user-linkRepo select');
+
+      repo.destroy({
+        success: function() {
+          select.select2('val', '');
+          repo.unset('id');
+          self.unregisteredRepos.add(repo);
+        }
+      });
+      return false;
     }
 
   });

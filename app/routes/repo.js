@@ -17,7 +17,7 @@ module.exports = function(app, middlewares, handlers) {
   });
 
   app.get('/api/repo/:repoId', middlewares.entity.exists('repo'), function(req, res, next) {
-    handlers.repo.retrieve(req.auth.tokenRepoId, req.params.repoId, function(error, data) {
+    handlers.repo.retrieve(req.auth.tokenUserId, req.params.repoId, function(error, data) {
       if (error) { return next(error); }
       return res.json(data);
     });
@@ -25,16 +25,16 @@ module.exports = function(app, middlewares, handlers) {
 
   app.put('/api/repo/:repoId', middlewares.auth.requireLogin, middlewares.entity.exists('repo'), function(req, res, next) {
     var updateData = req.body;
-    handlers.repo.update(req.auth.tokenRepoId, req.params.repoId, updateData, function(error) {
+    handlers.repo.update(req.auth.tokenUserId, req.params.repoId, updateData, function(error) {
       if (error) { return next(error); }
       return res.end('ok');
     });
   });
 
   app.del('/api/repo/:repoId', middlewares.auth.requireLogin, middlewares.entity.exists('repo'), function(req, res, next) {
-    handlers.repo.destroy(req.auth.tokenRepoId, req.params.repoId, function(error) {
+    handlers.repo.destroy(req.auth.tokenUserId, req.params.repoId, function(error) {
       if (error) { return next(error); }
-      return res.end('ok');
+      return res.json({});
     });
   });
 

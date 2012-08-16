@@ -7,7 +7,11 @@ define([
 
   var Collection = Backbone.Collection.extend({
     url: '/api/repo',
-    model: RepoModel
+    model: RepoModel,
+
+    comparator: function(repo) {
+      return repo.get('name');
+    }
   });
 
   return Collection;
