@@ -3,7 +3,6 @@ module.exports = function(store, cookieJar) {
 
   var async = require('async');
   var _ = require('underscore');
-  var Github = require('github');
   var tokenizer = require(process.env.APP_ROOT + '/tokenizer/tokenizer.js')();
   var UserModel = require(process.env.APP_ROOT + '/models/user.js')(store);
   var salt = 'Plubrl#mla!2lUCleFluSTouW@i@SWoA';
@@ -54,43 +53,6 @@ module.exports = function(store, cookieJar) {
     return next(null);
   };
 
-
-  var githubLogin = function(req, res, next, githubToken/* hack*/) {
-    async.auto({
-      githubUser: function(done) {
-        var github = new Github({
-          version: "3.0.0"
-        });
-        github.authenticate({
-          type: 'oauth',
-          token: githubToken
-        });
-
-        github.user.get({}, done);
-      },
-      user: ['githubUser', function(done, results) {
-        if (_.isEmpty(results.githubUser)) {
-          return done(new Error('internal: github failure: ' + JSON.stringify(results.githubUser)));
-        }
-        var userData = {
-          id: results.githubUser.login,
-          login: results.githubUser.login,
-          avatarUrl: String(results.githubUser.avatar_url),
-          token: githubToken,
-        };
-        new UserModel(userData).upsert({ id: results.githubUser.login }, done);
-      }]
-    }, function(error, results) {
-      if (error) { return next(error); }
-      provisionToken(req, res, next, results.githubUser.login);
-      // redirect to user's page
-      res.writeHead(303, {
-        Location: '/' + results.githubUser.login
-      });
-      res.end();
-    });
-  };
-
   var login = function(req, res, next) {
     async.auto({
       userData: function(done, results) {
@@ -136,8 +98,8 @@ module.exports = function(store, cookieJar) {
     isRole: isRole,
     requireLogin: requireLogin,
     requireLogout: requireLogout,
+    provisionToken: provisionToken,
     login: login,
-    githubLogin: githubLogin,
     logout: logout
   };
 };

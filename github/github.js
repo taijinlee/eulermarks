@@ -9,6 +9,30 @@ module.exports = function() {
     version: "3.0.0"
   });
 
+  var login = function(githubToken, callback) {
+    async.auto({
+      githubUser: function(done) {
+        github.authenticate({
+          type: 'oauth',
+          token: githubToken
+        });
+
+        github.user.get({}, done);
+      },
+      user: ['githubUser', function(done, results) {
+        if (_.isEmpty(results.githubUser)) {
+          return done(new Error('internal: github failure: ' + JSON.stringify(results.githubUser)));
+        }
+        return done(null, {
+          id: results.githubUser.login,
+          login: results.githubUser.login,
+          avatarUrl: String(results.githubUser.avatar_url),
+          token: githubToken,
+        });
+      }]
+    }, callback);
+  };
+
   var repoTransform = function(githubRepo, callback) {
     return callback(null, {
       userId: githubRepo.owner.login,
@@ -25,6 +49,7 @@ module.exports = function() {
   };
 
   return {
+    login: login,
     repoTransform: repoTransform,
     userGithubRepos: userGithubRepos
   };

@@ -18,7 +18,15 @@ module.exports = function(app, middlewares, handlers) {
 
     oauth.getOAuthAccessToken(req.query.code, {}, function(error, accessToken, refreshToken) {
       if (error) { return next(new Error('invalid: error from github: ' + error)); }
-      middlewares.auth.githubLogin(req, res, next, accessToken); // ends request
+      handlers.auth.githubLogin(accessToken, function(error, userData) {
+        if (error) { return next(error); }
+        middlewares.auth.provisionToken(req, res, next, userData.id);
+        // redirect to user's page
+        res.writeHead(303, {
+          Location: '/' + userData.id
+        });
+        return res.end();
+      });
     });
   });
 

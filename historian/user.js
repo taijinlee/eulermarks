@@ -14,6 +14,11 @@ module.exports = function(store) {
     });
   };
 
+  var upsert = function(criteria, userData, callback) {
+    var user = new UserModel(userData);
+    return user.upsert(criteria, callback);
+  };
+
   var update = function(criteria, params, callback) {
     var user = new UserModel(params);
     return user.update(criteria, callback);
@@ -26,6 +31,7 @@ module.exports = function(store) {
 
   return {
     create: create,
+    upsert: upsert,
     update: update,
     remove: remove
   };
