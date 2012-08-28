@@ -6,6 +6,7 @@
 1. Install latest version of node (check on [nodejs.org](http://nodejs.org))
 1. Install and run [Mongodb](http://www.mongodb.org/) on standard port
 1. Install node modules in base directory via ```npm install```
+1. Create a new app on [github](https://github.com/settings/applications) and point url: http://localhost:4000/, callbackurl: http://localhost:4000/api/auth/github (assuming you're using the default port 4000)
 
 ## Makefile ##
 
