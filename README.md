@@ -8,6 +8,7 @@
 1. Install node modules in base directory via ```npm install```
 1. Create a new app on [github](https://github.com/settings/applications) and point url: http://localhost:4000/, callbackurl: http://localhost:4000/api/auth/github (assuming you're using the default port 4000)
 1. Copy config file ```config/default.js.sample``` to ```config/default.js``` and fill in the appropriate fields
+1. Manually change ```web/js/router.js``` urlFragment for github client_id. Yes. Very hacky. Need to fix this.
 
 ## Makefile ##
 
