@@ -13,9 +13,11 @@ module.exports = function(store) {
 
       schema: {
         id: { type: 'string' },
+        repoId: { type: 'string' },
         userId: { type: 'string' },
         repo: { type: 'string' },
-        file: { type: 'string' },
+        filename: { type: 'string' },
+        sha: { type: 'string' },
         results: { type: 'object' },
         created: { type: 'timestamp', defaults: function() { return new Date().getTime(); } }
       }
@@ -26,4 +28,3 @@ module.exports = function(store) {
 
   return ServerModel;
 };
-
