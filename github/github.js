@@ -48,10 +48,40 @@ module.exports = function() {
     });
   };
 
+  var getFiles = function(userLogin, repo, callback) {
+    async.auto({
+      latestCommit: function(done) {
+        github.repos.getCommits({ user: userLogin, repo: repo, page: 1, per_page: 1 }, function(error, commits) {
+          if (error) { return done(error); }
+          var latestCommit = commits.shift();
+          return done(null, latestCommit.sha);
+        });
+      },
+      repoTree: ['latestCommit', function(done, results) {
+        github.gitdata.getTree({ user: userLogin, repo: repo, sha: results.latestCommit, recursive: true }, function(error, repoTree) {
+          if (error) { return done(error); }
+          return done(null, repoTree.tree);
+        });
+      }]
+    }, function(error, results) {
+      if (error) { return callback(error); }
+      return callback(null, results.repoTree);
+    });
+  };
+
+  var getFile = function(userLogin, repo, sha, callback) {
+    github.gitdata.getBlob({ user: userLogin, repo: repo, sha: sha }, function(error, results) {
+      if (error) { return callback(error); }
+      return callback(null, new Buffer(results.content, 'base64').toString());
+    });
+  };
+
   return {
     login: login,
     repoTransform: repoTransform,
-    userGithubRepos: userGithubRepos
+    userGithubRepos: userGithubRepos,
+    getFiles: getFiles,
+    getFile: getFile
   };
 
 };
