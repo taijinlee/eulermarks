@@ -25,7 +25,6 @@ module.exports = function(store) {
               filename: file.path,
               sha: file.sha
             };
-            console.log(runQueue);
             new BenchmarkRunQueue(runQueue).create(eachDone);
           }, done);
         });
@@ -41,7 +40,17 @@ module.exports = function(store) {
   };
 
   var remove = function(id, callback) {
-    return new RepoModel({ id: id }).remove(callback);
+    async.auto({
+      removeRepo: function(done) {
+        new RepoModel({ id: id }).remove(done);
+      },
+      removeBenchmarkQueue: function(done) {
+        new BenchmarkRunQueue({ repoId: id }).remove(done);
+      }
+    }, function(error, results) {
+      if (error) { return callback(error); }
+      return callback(null);
+    });
   };
 
   return {
