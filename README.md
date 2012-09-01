@@ -12,9 +12,10 @@
 
 ## Makefile ##
 
-- ```make run-dev``` to run the server locally with default port of 4000 (hostname of localhost:4000). Additionally, you can get pretty output via ```make -s run-dev | util/pretty.js```
+- ```make run-app-dev``` to run the web app server locally with default port of 4000 (hostname of localhost:4000). Additionally, you can get pretty output via ```make -s run-dev | util/pretty.js```
+- ```make run-benchmarker-dev``` to run the benchmarker server locally with default port of 5000 (hostname of localhost:5000). Additionally, you can get pretty output via ```make -s run-dev | util/pretty.js```
 - ```make build``` to run require.js optimizer
-- ```make run-prod``` to run the server locally using ```make build``` output
+- ```make run-app-prod``` to run the server locally using ```make build``` output
 - ```make test``` to run unit tests
 - ```make lint``` to run js linter
 
