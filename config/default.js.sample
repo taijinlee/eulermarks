@@ -4,6 +4,15 @@ module.exports = {
     host: 'localhost:4000'
   },
 
+  benchmarker: {
+    port: 5000,
+    host: 'localhost:5000'
+  },
+
+  supportedFileTypes: [
+    'js'
+  ],
+
   githubOauth: {
     clientId: 'githubAppClientId',
     secret: 'githubAppSecret'

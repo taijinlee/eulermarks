@@ -1,6 +1,7 @@
 
 module.exports = function(store) {
   var async = require('async');
+  var supportedFileTypes = require('config').supportedFileTypes;
   var github = require(process.env.APP_ROOT + '/github/github.js')();
 
   var RepoModel = require(process.env.APP_ROOT + '/models/repo.js')(store);
@@ -14,8 +15,13 @@ module.exports = function(store) {
       queueBenchmarks: function(done) {
         github.getFiles(repoData.userId, repoData.name, function(error, files) {
           if (error) { return done(error); }
+
+          var fileMatcher = new RegExp('\\d+([-\\w+]*)\\.(' + supportedFileTypes.join('|') + ')$');
           async.forEach(files, function(file, eachDone) {
             if (file.type !== 'blob') { return eachDone(); }
+
+            var fileMatch = fileMatcher.exec(file.path);
+            if (!fileMatch) { return eachDone(); };
 
             var runQueue = {
               id: store.generateId(),
