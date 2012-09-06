@@ -65,3 +65,8 @@ require(process.env.APP_ROOT + '/app/routes.js')(app, store, history);
 // start listening
 app.listen(appConfig.port);
 logger.log({ message: 'server start', port: app.address().port });
+
+// if dev, run cron in background
+if (process.env.NODE_ENV === 'dev') {
+  require(process.env.APP_ROOT + '/app/cron.js');
+}

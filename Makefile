@@ -29,3 +29,6 @@ run-benchmarker-dev:
 run-app-prod:
 	NODE_ENV=prod APP_ROOT=${APP_ROOT} node config/build/mongoIndexes.js
 	NODE_ENV=prod APP_ROOT=${APP_ROOT} node app/server.js
+
+run-cron-prod:
+	NODE_ENV=prod APP_ROOT=${APP_ROOT} node app/cron.js

@@ -11,6 +11,7 @@ define([
 
       // populate defaults when storing into store
       this.store.insert(_.extend({}, this.getSchemaDefaults(), this.toJSON()), this.context, function(error, data) {
+        if (!callback) { return; }
         if (error) { return callback(error); }
         var success = self.set(data, {
           error: function(model, error) {
@@ -19,13 +20,14 @@ define([
         });
         if (!success) { return; } // error case taken care by error callback
 
-        return (callback) ? callback(null, data) : null;
+        return callback(null, data);
       });
     },
 
     retrieve: function(callback) {
       var self = this;
       this.store.retrieve(this.toJSON({ defaults: false }), this.context, {}, function(error, item) {
+        if (!callback) { return; }
         if (error) { return callback(error); }
         if (!item) { return callback(null, false); }
 
@@ -45,6 +47,7 @@ define([
 
     update: function(criteria, callback) {
       this.store.update(criteria, this.toJSON({ defaults: false }), this.context, function(error) {
+        if (!callback) { return; }
         if (error) { return callback(error); }
         return callback(null);
       });
@@ -52,6 +55,7 @@ define([
 
     upsert: function(criteria, callback) {
       this.store.upsert(criteria, this.toJSON({ defaults: false }), this.context, function(error) {
+        if (!callback) { return; }
         if (error) { return callback(error); }
         return callback(null);
       });
@@ -59,6 +63,7 @@ define([
 
     remove: function(callback) {
       this.store.destroy(this.toJSON({ defaults: false }), this.context, function(error) {
+        if (!callback) { return; }
         if (error) { return callback(error); }
         return callback(null);
       });
@@ -66,6 +71,7 @@ define([
 
     list: function(criteria, limit, skip, callback) {
       this.store.query(criteria, this.context, {limit: limit, skip: skip }, function(error, items) {
+        if (!callback) { return; }
         if (error) { return callback(error); }
         return callback(null, items);
       });

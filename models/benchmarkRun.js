@@ -13,9 +13,8 @@ module.exports = function(store) {
 
       schema: {
         id: { type: 'string' },
-        repoId: { type: 'string' },
         userId: { type: 'string' },
-        repo: { type: 'string' },
+        repoId: { type: 'string' },
         filename: { type: 'string' },
         sha: { type: 'string' },
         results: { type: 'object' },

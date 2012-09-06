@@ -23,7 +23,7 @@ module.exports = function(host, port) {
   };
 
   var idEncode = function(_obj) {
-    if (!_obj.hasOwnProperty('id')) { return _obj; }
+    if (!_obj || !_obj.hasOwnProperty('id')) { return _obj; }
 
     var obj = _.clone(_obj);
     obj._id = String(obj.id);
