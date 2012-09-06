@@ -32,3 +32,7 @@ The framework is built in layers. Layers can be asynchronous.
 1. Historian -- business logic of what tables to populate based on what has happened (historian/)
   - async
   - right now called right after a history element is inserted, but can be decoupled more
+
+## Rebase workflow ##
+
+For collaborators, I prefer [rebase workflow](http://randyfay.com/node/91) as opposed to merge workflow. I believe all pull requests are merge workflow so I don't know what to do about that yet. At this point I think all potential contributers are collaborators on the project.
