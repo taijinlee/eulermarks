@@ -4,6 +4,7 @@ var async = require('async');
 var _ = require('underscore');
 
 var indexes = [
+  { database: 'eulermarks', collection: 'repoFiles', index: { repoId: 1 } }
 ];
 
 var mongoServer = new mongo.Server('localhost', 27017);

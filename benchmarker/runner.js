@@ -25,7 +25,7 @@ module.exports = function() {
       sendResults: ['runFile', function(done, results) {
         var runData = {
           userId: userId,
-          repoId: repo,
+          repoId: userId + '/' + repo,
           filename: filename,
           sha: sha,
           results: results.runFile

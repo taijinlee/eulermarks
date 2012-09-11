@@ -19,7 +19,7 @@ module.exports = function(store, history) {
 
       request.post({ url: 'http://localhost:5000/bench', json: body }, function(error, response, body) {
         if (error) { /* TODO: log this somehow! */ return; }
-        new BenchmarkRunQueue(nextRun.id).remove(function(error) {
+        new BenchmarkRunQueue({ id: nextRun.id }).remove(function(error) {
           if (error) { /* TODO: log this somehow! */ return; }
         });
       });
