@@ -31,7 +31,12 @@ define([
     },
 
     render: function(id) {
-      this.$el.html(_.template(benchmarksTemplate, { repoName: this.repoName }));
+      var templateVars = {
+        userId: this.userId,
+        userLink: this.pather.getUrl('user', { userId: this.userId }),
+        repoName: this.repoName
+      };
+      this.$el.html(_.template(benchmarksTemplate, templateVars));
 
       var self = this;
       this.user.fetch({

@@ -21,20 +21,24 @@ define([
       this.vent = vent; this.pather = pather; this.cookie = cookie;
 
       this.userId = args[0];
+      this.isSelf = (this.userId === this.cookie.get('userId'));
+
       this.user = new UserModel({ id: this.userId });
       this.user.on('change', this.renderUserDetails, this);
 
       this.repos = new RepoCollection();
       this.repos.on('reset', this.renderUserRepos, this);
-      this.repos.on('add', this.renderUserRepos, this);
-      this.repos.on('remove', this.renderUserRepos, this);
 
+      if (this.isSelf) {
+        this.repos.on('add', this.renderUserRepos, this);
+        this.repos.on('remove', this.renderUserRepos, this);
 
-      this.unregisteredRepos = new RepoCollection();
-      this.unregisteredRepos.url = '/api/repo/unregistered';
-      this.unregisteredRepos.on('reset', this.renderUnregisteredRepos, this);
-      this.unregisteredRepos.on('add', this.populateSelect, this);
-      this.unregisteredRepos.on('remove', this.populateSelect, this);
+        this.unregisteredRepos = new RepoCollection();
+        this.unregisteredRepos.url = '/api/repo/unregistered';
+        this.unregisteredRepos.on('reset', this.renderUnregisteredRepos, this);
+        this.unregisteredRepos.on('add', this.populateSelect, this);
+        this.unregisteredRepos.on('remove', this.populateSelect, this);
+      }
 
       this.profile = new ProfilePictureView();
       this.reposTable = new TableListView();
@@ -57,9 +61,11 @@ define([
         data: { userId: this.userId }
       });
 
-      this.unregisteredRepos.fetch({
-        data: { userId: this.userId }
-      });
+      if (this.isSelf) {
+        this.unregisteredRepos.fetch({
+          data: { userId: this.userId }
+        });
+      }
 
       return this;
     },
@@ -75,7 +81,7 @@ define([
         var repoJSON = repo.toJSON();
         var repoPath = this.pather.getUrl('repo', { userId: repoJSON.userId, repoName: repoJSON.name });
         repoJSON.repoLink = this.make('a', { 'href': repoPath }, repoJSON.name).outerHTML;
-        repoJSON.actions = this.make('button', { 'class': 'btn btn-danger user-repoUnlink', 'data-repoName': repoJSON.name }, 'Unlink').outerHTML;
+        repoJSON.actions = this.isSelf ? this.make('button', { 'class': 'btn btn-danger user-repoUnlink', 'data-repoName': repoJSON.name }, 'Unlink').outerHTML : '';
         return repoJSON;
       }, this);
 

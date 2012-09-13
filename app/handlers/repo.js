@@ -8,7 +8,9 @@ module.exports = function(store, history) {
   var WebRepoModel = require(process.env.APP_ROOT + '/models/webModel.js')(store, 'repo');
 
   /* Basic crud */
-  var create = function(repoData, callback) {
+  var create = function(tokenUserId, repoData, callback) {
+    if (tokenUserId !== repoData.userId) { return callback(new Error('unauthorized: can only create repos for yourself')); }
+
     repoData.id = repoData.userId + '/' + repoData.name;
     var repo = new RepoModel(repoData);
     if (!repo.isValid()) { return callback(new Error('Invalid')); }
@@ -40,8 +42,8 @@ module.exports = function(store, history) {
   };
 
   var destroy = function(tokenUserId, repoId, callback) {
-    // TODO: check for repository ownership... in routes?
-    // if (tokenUserId !== repoId) { return callback(new Error('unauthorized')); }
+    if (tokenUserId !== repoId.split('/')[0]) { return callback(new Error('unauthorized: cannot delete other peoples repos')); }
+
     var repo = new RepoModel({ id: repoId });
     if (!repo.isExistingFieldsValid()) { return callback(new Error('invalid')); }
 

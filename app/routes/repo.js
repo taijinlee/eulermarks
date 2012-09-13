@@ -8,9 +8,9 @@ module.exports = function(app, middlewares, handlers) {
     });
   });
 
-  app.post('/api/repo', function(req, res, next) {
+  app.post('/api/repo', middlewares.auth.requireLogin, function(req, res, next) {
     var repoData = req.body;
-    handlers.repo.create(repoData, function(error, repoData) {
+    handlers.repo.create(req.auth.tokenUserId, repoData, function(error, repoData) {
       if (error) { return next(error); }
       return res.json(repoData);
     });
