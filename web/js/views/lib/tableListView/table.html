@@ -8,7 +8,7 @@
   </thead>
   <tbody>
     <% if (!data.length) { %>
-      <tr><td colspan="0">No repositories linked. Link one from the dropdown in top right corner</td></tr>
+      <tr><td colspan="0"><%= emptyDataText %></td></tr>
     <% } %>
 
     <% for (var dataIndex = 0; dataIndex < data.length; dataIndex++) { %>

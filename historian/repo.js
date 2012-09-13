@@ -33,7 +33,7 @@ module.exports = function(store) {
             id: repoData.id + ':' + file.path,
             repoId: repoData.id,
             filename: file.path,
-            hasResults: false
+            results: null
           }).create(eachDone);
         }, done);
       }],

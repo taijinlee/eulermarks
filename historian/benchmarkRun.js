@@ -10,7 +10,8 @@ module.exports = function(store) {
         new BenchmarkRunModel(runData).create(done);
       },
       repoFileUpdate: ['logRunData', function(done, results) { // only to make sure that it didn't error out first
-        new RepoFileModel({ hasResults: true }).update({ id: runData.repoId + ':' + runData.filename }, done);
+        // results have to be smarter later! need to look at all benchmarkRuns and see what the aggregate is
+        new RepoFileModel({ results: runData.results }).update({ id: runData.repoId + ':' + runData.filename }, done);
       }]
     }, function(error, results) {
       if (error) { return callback(error); }

@@ -1,0 +1,27 @@
+module.exports = function(store) {
+  var requirejs = require(process.env.APP_ROOT + '/models/util/require.js');
+
+  var ServerModel;
+  requirejs([
+    'web/js/models/repoFile'
+  ], function(WebModel) {
+
+    ServerModel = WebModel.extend({
+      store: store,
+      context: { database: 'eulermarks', collection: 'repoFiles' },
+      key: { primary: 'id' },
+
+      schema: {
+        id: { type: 'string' },
+        repoId: { type: 'string' },
+        filename: { type: 'string' },
+        results: { type: 'object' },
+        created: { type: 'timestamp', defaults: function() { return new Date().getTime(); } }
+      }
+
+    });
+
+  });
+
+  return ServerModel;
+};

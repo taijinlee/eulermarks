@@ -79,7 +79,7 @@ define([
         return repoJSON;
       }, this);
 
-      this.reposTable.setElement(this.$('#user-repos')).render(keys, reposWithAction);
+      this.reposTable.setElement(this.$('#user-repos')).render(keys, reposWithAction, 'No repositories linked. Link one above.');
       return this;
     },
 
