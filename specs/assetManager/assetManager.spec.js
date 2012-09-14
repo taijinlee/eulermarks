@@ -2,7 +2,7 @@
 var should = require('should');
 var _ = require('underscore');
 
-var appConfig = require('config').app;
+var appConfig = require(process.env.APP_ROOT + '/config/config.js')().app;
 var store = require(process.env.APP_ROOT + '/store/store.js')('ram');
 var Asset = require(process.env.APP_ROOT + '/models/asset.js')(store);
 var AssetBlob = require(process.env.APP_ROOT + '/models/assetBlob.js')(store);

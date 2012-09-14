@@ -5,7 +5,7 @@ module.exports = function() {
   var exec = require('child_process').exec;
   var async = require('async');
   var request = require('request');
-  var appConfig = require('config').app;
+  var appConfig = require(process.env.APP_ROOT + '/config/config.js')().app;
 
   var github = require(process.env.APP_ROOT + '/github/github.js')();
 

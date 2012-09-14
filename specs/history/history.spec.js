@@ -4,7 +4,7 @@ var history = require(process.env.APP_ROOT + '/history/history.js')(store);
 
 describe('History:', function() {
 
-  var historyContext = { database: 'logs', collection: 'history' };
+  var historyContext = { database: 'eulermarks', collection: 'history' };
 
   var userId = 'myUserId';
   var subject = 'mySubject';

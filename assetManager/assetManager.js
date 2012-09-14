@@ -1,7 +1,7 @@
 
 module.exports = function(store) {
 
-  var appConfig = require('config').app;
+  var appConfig = require(process.env.APP_ROOT + '/config/config.js')().app;
   var crypto = require('crypto');
   var async = require('async');
   var AssetBlob = require(process.env.APP_ROOT + '/models/assetBlob.js')(store);

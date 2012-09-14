@@ -20,7 +20,7 @@ module.exports = function(store) {
     });
 
     /* async call to historian to interpret history */
-    if (true || process.env.NODE_ENV === 'dev') {
+    if (process.env.NODE_ENV === 'dev') {
       params.push(function(error) {
         // log error on error, otherwise no need to do anything
         if (error) { return logger.error(error); }

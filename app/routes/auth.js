@@ -2,7 +2,7 @@
 module.exports = function(app, middlewares, handlers) {
 
   var OAuth2 = require("oauth").OAuth2;
-  var githubOauthConfig = require('config').githubOauth;
+  var githubOauthConfig = require(process.env.APP_ROOT + '/config/config.js')().githubOauth;
 
   /**
    * Using email and password, logs in an existing user

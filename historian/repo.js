@@ -1,7 +1,7 @@
 
 module.exports = function(store) {
   var async = require('async');
-  var supportedFileTypes = require('config').supportedFileTypes;
+  var supportedFileTypes = require(process.env.APP_ROOT + '/config/config.js')().supportedFileTypes;
   var github = require(process.env.APP_ROOT + '/github/github.js')();
 
   var RepoModel = require(process.env.APP_ROOT + '/models/repo.js')(store);

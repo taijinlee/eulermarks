@@ -6,7 +6,7 @@ if (process.env.APP_ROOT === undefined) {
 }
 
 var express = require('express');
-var appConfig = require('config').benchmarker;
+var appConfig = require(process.env.APP_ROOT + '/config/config.js')().benchmarker;
 var logger = require(process.env.APP_ROOT + '/logger/logger.js')();
 var runner = require(process.env.APP_ROOT + '/benchmarker/runner.js')();
 var app = express.createServer();

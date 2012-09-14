@@ -6,7 +6,7 @@ if (process.env.APP_ROOT === undefined) {
 }
 
 var express = require('express');
-var appConfig = require('config').app;
+var appConfig = require(process.env.APP_ROOT + '/config/config.js')().app;
 var logger = require(process.env.APP_ROOT + '/logger/logger.js')();
 var app = express.createServer();
 
