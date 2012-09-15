@@ -22,10 +22,14 @@ require([
   'jquery',
   'underscore',
   'backbone',
+  'models/config',
   'router'
-], function($, _, Backbone, Router) {
-  var vent = _.extend({}, Backbone.Events);
-  var router = new Router(vent);
+], function($, _, Backbone, ConfigModel, Router) {
+  new ConfigModel().fetch({
+    success: function(configModel, configObj) {
+      var router = new Router(configObj);
+    }
+  });
 
   // set a globally delegated event for a tags.
   // when clicked, we'll use backbone navigate unless ctrl, meta key were held, or if it was not left click

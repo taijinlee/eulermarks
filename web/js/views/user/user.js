@@ -17,7 +17,7 @@ define([
       'click .user-repoUnlink': 'unlinkRepo'
     },
 
-    initialize: function(vent, pather, cookie, args) {
+    initialize: function(config, vent, pather, cookie, args) {
       this.vent = vent; this.pather = pather; this.cookie = cookie;
 
       this.userId = args[0];
@@ -40,8 +40,8 @@ define([
         this.unregisteredRepos.on('remove', this.populateSelect, this);
       }
 
-      this.profile = new ProfilePictureView();
-      this.reposTable = new TableListView();
+      this.profile = new ProfilePictureView(config, vent, pather, cookie);
+      this.reposTable = new TableListView(config, vent, pather, cookie);
     },
 
     render: function() {

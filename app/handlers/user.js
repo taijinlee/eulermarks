@@ -5,7 +5,7 @@ module.exports = function(store, history) {
   var _ = require('underscore');
 
   var UserModel = require(process.env.APP_ROOT + '/models/user.js')(store);
-  var WebUserModel = require(process.env.APP_ROOT + '/models/webModel.js')(store, 'user');
+  var WebUserModel = require(process.env.APP_ROOT + '/models/webModel.js')('user');
 
   var tokenizer = require(process.env.APP_ROOT + '/tokenizer/tokenizer.js')();
 

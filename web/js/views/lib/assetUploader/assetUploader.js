@@ -16,7 +16,7 @@ define([
       'click a#asset_upload_button': 'triggerUploaderClick',
     },
 
-    initialize: function(vent, pather, cookie, args) {
+    initialize: function(config, vent, pather, cookie, args) {
       this.vent = vent;
     },
 

@@ -11,7 +11,7 @@ define([
       'class': 'statsPane'
     },
 
-    initialize: function(vent, pather, cookie, args) {
+    initialize: function(config, vent, pather, cookie, args) {
     },
 
     render: function(stats) {

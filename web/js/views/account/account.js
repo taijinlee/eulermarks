@@ -15,14 +15,14 @@ define([
       'click button.delete': 'deleteUser'
     },
 
-    initialize: function(vent, pather, cookie, args) {
+    initialize: function(config, vent, pather, cookie, args) {
       this.vent = vent; this.pather = pather; this.cookie = cookie;
 
       var userId = cookie.get('userId');
       this.user = new UserModel({ id: userId });
       this.vent.on('load:user', this.renderAccountForm, this);
 
-      this.assetUploader = new AssetUploaderView(vent, pather, cookie, args);
+      this.assetUploader = new AssetUploaderView(config, vent, pather, cookie, args);
     },
 
     render: function(id) {

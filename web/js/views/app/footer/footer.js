@@ -9,13 +9,13 @@ define([
   var FooterView = Backbone.View.extend({
     tagName: 'footer',
 
-    initialize: function(vent, pather, cookie, args) {
+    initialize: function(config, vent, pather, cookie, args) {
       this.routes = [
         { symName: 'homepage', name: 'About' },
         { symName: 'homepage', name: 'Contact' }
       ];
 
-      this.navigation = new HorizontalLinksView(vent, pather, cookie);
+      this.navigation = new HorizontalLinksView(config, vent, pather, cookie);
     },
 
     render: function() {

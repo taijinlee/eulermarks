@@ -6,7 +6,7 @@ define([
 ], function($, _, Backbone, linkTemplate) {
 
   var View = Backbone.View.extend({
-    initialize: function(vent, pather, cookie) {
+    initialize: function(config, vent, pather, cookie) {
       this.vent = vent; this.pather = pather; this.cookie = cookie;
       // shown in this order
       // [ { symName: 'symbolicPatherName', name: 'Display for Link', loggedIn: true/false, id: linkId }, .. ]

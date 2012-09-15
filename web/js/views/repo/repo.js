@@ -13,7 +13,7 @@ define([
     events: {
     },
 
-    initialize: function(vent, pather, cookie, args) {
+    initialize: function(config, vent, pather, cookie, args) {
       this.vent = vent; this.pather = pather; this.cookie = cookie;
 
       this.userId = args[0];
@@ -26,8 +26,8 @@ define([
       this.repoFiles = new RepoFileCollection();
       this.repoFiles.on('reset', this.renderRepoBenchmarks, this);
 
-      this.profile = new ProfilePictureView();
-      this.repoFilesTable = new TableListView();
+      this.profile = new ProfilePictureView(config, vent, pather, cookie);
+      this.repoFilesTable = new TableListView(config, vent, pather, cookie);
     },
 
     render: function(id) {

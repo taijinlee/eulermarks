@@ -2,7 +2,7 @@
 module.exports = function(store, history) {
 
   var BenchmarkRunModel = require(process.env.APP_ROOT + '/models/benchmarkRun.js')(store);
-  var WebBenchmarkRunModel = require(process.env.APP_ROOT + '/models/webModel.js')(store, 'benchmarkRun');
+  var WebBenchmarkRunModel = require(process.env.APP_ROOT + '/models/webModel.js')('benchmarkRun');
 
   var create = function(runData, callback) {
     runData.id = store.generateId();

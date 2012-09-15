@@ -9,7 +9,7 @@ define([
       'class': 'profilePicture'
     },
 
-    initialize: function(vent, pather, cookie) {
+    initialize: function(config, vent, pather, cookie) {
     },
 
     render: function(imgSrc, altText, caption, profileUrl) {

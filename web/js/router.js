@@ -8,23 +8,29 @@ define([
 ], function($, _, Backbone, Pather, CookieModel, AppView) {
   var Router = Backbone.Router.extend({
 
-    paths: [
-      { urlFragment: '', view: 'homepage', symName: 'homepage' },
-      { urlFragment: 'logout', view: 'logout', symName: 'logout' },
-      { urlFragment: ':userId', view: 'user/user', symName: 'user' },
-      { urlFragment: ':userId/:repoName', view: 'repo/repo', symName: 'repo' },
+    paths: function() {
+      return [
+        { urlFragment: '', view: 'homepage', symName: 'homepage' },
+        { urlFragment: 'logout', view: 'logout', symName: 'logout' },
+        { urlFragment: ':userId', view: 'user/user', symName: 'user' },
+        { urlFragment: ':userId/:repoName', view: 'repo/repo', symName: 'repo' },
 
-      /* external links */
-      { urlFragment: 'https://github.com/login/oauth/authorize?client_id=232bd07a87e144588ce1', view: '!external', symName: 'githubOauth' }
-    ],
+        /* external links */
+        { urlFragment: 'https://github.com/login/oauth/authorize?client_id=' + this.config.githubOauth.clientId, view: '!external', symName: 'githubOauth' }
+      ];
+    },
 
-    initialize: function(vent) {
-      this.vent = vent; this.pather = new Pather(this.paths); this.cookie = new CookieModel();
-      this.app = new AppView(this.vent, this.pather, this.cookie);
+    initialize: function(config) {
+      this.config = config;
+      this.vent = _.extend({}, Backbone.Events);
+      this.pather = new Pather(this.paths());
+      this.cookie = new CookieModel();
+
+      this.app = new AppView(this.config, this.vent, this.pather, this.cookie);
 
       // going backwards for backbone compatability
       var self = this;
-      _.each(this.paths.reverse(), function(path) {
+      _.each(this.paths().reverse(), function(path) {
         var view = path.view;
         // ignore any empty views or views with ! in the view name
         if (!view || view.indexOf('!') !== -1) { return; }
@@ -65,7 +71,7 @@ define([
         self.vent.unbind();
 
         // self.AppView.bindNotifications();
-        self.app.render(new View(self.vent, self.pather, self.cookie, args));
+        self.app.render(new View(self.config, self.vent, self.pather, self.cookie, args));
       });
     },
 

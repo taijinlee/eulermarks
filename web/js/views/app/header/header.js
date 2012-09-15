@@ -11,14 +11,14 @@ define([
       'click #logout': 'logout'
     },
 
-    initialize: function(vent, pather, cookie) {
+    initialize: function(config, vent, pather, cookie) {
       this.vent = vent; this.pather = pather; this.cookie = cookie;
       this.routes = [
         { symName: 'githubOauth', name: 'Sign in using GitHub', loggedIn: false },
         { symName: 'logout', name: 'Sign out', loggedIn: true, id: 'logout' }
       ];
 
-      this.navigation = new HorizontalLinksView(this.vent, this.pather, this.cookie);
+      this.navigation = new HorizontalLinksView(config, vent, pather, cookie);
     },
 
     render: function() {

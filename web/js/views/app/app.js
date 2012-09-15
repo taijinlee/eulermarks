@@ -10,12 +10,12 @@ define([
   var View = Backbone.View.extend({
     el: $('#container'),
 
-    initialize: function(vent, pather, cookie) {
+    initialize: function(config, vent, pather, cookie) {
       this.vent = vent;
 
-      this.header = new HeaderView(vent, pather, cookie);
-      // this.notifications = new NotificationsView(vent, pather, cookie, args);
-      this.footer = new FooterView(vent, pather, cookie);
+      this.header = new HeaderView(config, vent, pather, cookie);
+      // this.notifications = new NotificationsView(config, vent, pather, cookie, args);
+      this.footer = new FooterView(config, vent, pather, cookie);
     },
 
     render: function(view) {

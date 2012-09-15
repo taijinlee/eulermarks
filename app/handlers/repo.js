@@ -5,7 +5,7 @@ module.exports = function(store, history) {
 
   var github = require(process.env.APP_ROOT + '/github/github.js')();
   var RepoModel = require(process.env.APP_ROOT + '/models/repo.js')(store);
-  var WebRepoModel = require(process.env.APP_ROOT + '/models/webModel.js')(store, 'repo');
+  var WebRepoModel = require(process.env.APP_ROOT + '/models/webModel.js')('repo');
 
   /* Basic crud */
   var create = function(tokenUserId, repoData, callback) {

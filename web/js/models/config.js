@@ -3,7 +3,7 @@ define([
 ], function(BackboneWebmodel) {
 
   var Model = BackboneWebmodel.extend({
-    urlRoot: '', // none
+    urlRoot: '/api/config',
 
     schema: {
       // fluid
