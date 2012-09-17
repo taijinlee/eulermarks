@@ -50,10 +50,10 @@ module.exports = function(host, port) {
   };
 
   var retrieve = function(criteria, context, options, callback) {
-    createDatabaseCollection(context.database, context.collection);
-    criteria = idEncode(criteria);
-
-    return callback(null, sift(criteria, data[context.database][context.collection]).shift());
+    return query(criteria, context, options, function(error, items) {
+      if (error) { return callback(error); }
+      return callback(null, items[0]);
+    });
   };
 
   var update = function(criteria, obj, context, callback) {
@@ -94,14 +94,21 @@ module.exports = function(host, port) {
     return callback(null);
   };
 
+  var query = function(criteria, context, options, callback) {
+    createDatabaseCollection(context.database, context.collection);
+    criteria = idEncode(criteria);
+
+    return callback(null, sift(criteria, data[context.database][context.collection]));
+  };
+
   return {
-    open: open,
-    close: close,
     insert: insert,
     retrieve: retrieve,
     update: update,
     upsert: upsert,
     destroy: destroy,
+    query: query,
+
     generateId: generateId,
     idEncode: idEncode,
     idDecode: idDecode

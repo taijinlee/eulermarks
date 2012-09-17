@@ -15,6 +15,7 @@ var app = express.createServer();
 express.logger.token('date', function() { return Date().replace(/GMT-\d{4} /, ''); });
 
 app.configure(function() {
+  app.use(express.logger(logger.serverLogFormat()));
   app.use(express.bodyParser({ uploadDir: process.env.APP_ROOT + '/tmp' }));
   app.use(express.cookieParser());
 });

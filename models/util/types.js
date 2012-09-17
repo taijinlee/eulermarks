@@ -1,3 +1,4 @@
+/*global window*/
 
 define([
   'validator'
