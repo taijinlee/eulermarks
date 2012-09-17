@@ -116,6 +116,23 @@ module.exports = function(host, port) {
       criteria = idEncode(criteria);
       var results = db.collection(context.collection).find(criteria, options, function(error, cursor) {
         if (error) { return callback(translateError(error, stackTrace)); }
+
+        cursor.explain(function(error, explanation) {
+          if (explanation.cursor === 'BasicCursor') {
+            var info = {
+              criteria: criteria,
+              context: context,
+              options: options,
+              explanation: explanation
+            };
+            console.log(JSON.stringify({
+              message: 'Not querying via mongo key',
+              stackTrace: stackTrace,
+              info: info
+            }));
+          }
+        });
+
         cursor.toArray(function(error, data) {
           if (error) { return callback(translateError(error, stackTrace)); }
           conn.close();
