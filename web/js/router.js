@@ -29,6 +29,11 @@ define([
       this.app = new AppView(this.config, this.vent, this.pather, this.cookie);
 
       // going backwards for backbone compatability
+
+      this.route('*splat', 'default', function() {
+        return Backbone.history.navigate('', { trigger: true });
+      });
+
       var self = this;
       _.each(this.paths().reverse(), function(path) {
         var view = path.view;
@@ -73,10 +78,6 @@ define([
         // self.AppView.bindNotifications();
         self.app.render(new View(self.config, self.vent, self.pather, self.cookie, args));
       });
-    },
-
-    defaultAction: function(actions) {
-      console.log('No Route:', actions);
     }
 
   });
