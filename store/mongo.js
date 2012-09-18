@@ -129,7 +129,7 @@ module.exports = function(host, port) {
           // TODO: change console.log to something else? not sure
           if (explanation.cursor === 'BasicCursor') {
             console.log(JSON.stringify({
-              message: 'Not querying via mongo key',
+              message: 'Not querying mongo via key',
               stackTrace: stackTrace,
               info: info
             }));
