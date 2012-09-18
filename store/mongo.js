@@ -1,6 +1,7 @@
 
 var mongo = require('mongodb');
 var _ = require('underscore');
+var config = require(process.env.APP_ROOT + '/config/config.js')();
 
 module.exports = function(host, port) {
 
@@ -118,15 +119,24 @@ module.exports = function(host, port) {
         if (error) { return callback(translateError(error, stackTrace)); }
 
         cursor.explain(function(error, explanation) {
+          var info = {
+            criteria: criteria,
+            context: context,
+            options: options,
+            explanation: explanation
+          };
+
+          // TODO: change console.log to something else? not sure
           if (explanation.cursor === 'BasicCursor') {
-            var info = {
-              criteria: criteria,
-              context: context,
-              options: options,
-              explanation: explanation
-            };
             console.log(JSON.stringify({
               message: 'Not querying via mongo key',
+              stackTrace: stackTrace,
+              info: info
+            }));
+          }
+          if (explanation.millis > config.store.mongo.maxMillisOnWarn) {
+            console.log(JSON.stringify({
+              message: 'Query took more than ' + config.store.mongo.maxMillisOnWarn + ' ms',
               stackTrace: stackTrace,
               info: info
             }));
